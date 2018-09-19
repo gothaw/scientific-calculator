@@ -5,7 +5,10 @@
   "main": "index.html",
   "scripts": {
     "sync": "browser-sync start --directory --server --files '*.js, *.html, *.css'",
-    "sass": "node-sass --watch src/scss --output dist/css"
+    "sass:dev": "node-sass --watch src/scss --output dist/css",
+    "sass:prod": "node-sass src/scss --output dist/css --output-style compressed",
+    "wp:dev": "webpack --mode development --progress --watch",
+    "wp:prod": "webpack --mode production"
   },
   "repository": {
     "type": "git",
@@ -25,6 +28,8 @@
   "devDependencies": {
     "browser-sync": "~2.24.7",
     "node-sass": "~4.9.3",
-    "webpack": "~4.19.1"
+    "webpack": "~4.19.1",
+    "webpack-cli": "~3.1.0",
+    "webpack-server": "~0.1.2"
   }
 }

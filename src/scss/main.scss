@@ -1,6 +1,9 @@
+/*=========General======*/
+//Test styling
+
 $col1 : yellow;
 
 body{
-  background-color: lighten(yellow, 30%);
+  background-color: lighten($col1, 30%);
   font-weight: bold;
 }
