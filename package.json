@@ -1,0 +1,30 @@
+{
+  "name": "scientific-calculator",
+  "version": "0.0.1",
+  "description": "scientific calculator in javascript",
+  "main": "index.html",
+  "scripts": {
+    "sync": "browser-sync start --directory --server --files '*.js, *.html, *.css'",
+    "sass": "node-sass --watch src/scss --output dist/css"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/gothaw/scientific-calculator.git"
+  },
+  "keywords": [
+    "calculator",
+    "javascript",
+    "scientific"
+  ],
+  "author": "Radoslaw Soltan",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/gothaw/scientific-calculator/issues"
+  },
+  "homepage": "https://github.com/gothaw/scientific-calculator#readme",
+  "devDependencies": {
+    "browser-sync": "~2.24.7",
+    "node-sass": "~4.9.3",
+    "webpack": "~4.19.1"
+  }
+}
