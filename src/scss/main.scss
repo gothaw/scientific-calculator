@@ -5,7 +5,10 @@
 /*==================================== General ====================================*/
 
 $bg-color : lighten(black, 45%);
+$color-buttons: #bfbfbf;
 $color-dark : #344669;
+$color-light-1: #55bdff;
+$color-light-2: #ff8d16;
 $text-color: white;
 
 body{
@@ -26,7 +29,7 @@ header{
   .app-title{
     font-size: 2em;
     font-family: "Agency FB", sans-serif;
-    margin: 30px 0 20px;
+    margin: 10vh 0 20px;
     @media screen and (min-width: 1080px){
       font-size: 3em;
     }
@@ -34,7 +37,7 @@ header{
   .app-description{
     font-size: 1em;
     font-family: "Source Sans Pro", sans-serif;
-    margin-bottom: 30px;
+    margin-bottom: 15vh;
     @media screen and (min-width: 1080px){
       font-size: 1.25em;
     }
@@ -43,12 +46,13 @@ header{
 /*==================================== Main ====================================*/
 .calculator-wrapper{
   width: 768px;
-  margin: 0 auto 50px;
+  margin: 0 auto 20vh;
   background-color: $color-dark;
   padding: 25px;
 }
 .calculator-header {
   border: black solid 1px;
+  margin: 0 5px;
   .output, .input {
     background-color: white;
     text-align: right;
@@ -67,15 +71,20 @@ header{
   }
 }
 .calculator-buttons{
+  margin-top: 10px;
   .buttons-top-row, .buttons-columns, .buttons-advance, .buttons-basic{
     display: grid;
   }
   .buttons-top-row, .buttons-basic, .buttons-advance{
     div{
-      background-color: $bg-color;
+      background-color: $color-buttons;
       margin: 5px;
       text-align: center;
       padding: 5px 0;
+      cursor: pointer;
+    }
+    .highlighted-btn{
+      background-color: $color-light-1;
     }
   }
   .buttons-top-row{
@@ -87,6 +96,9 @@ header{
       grid-template-columns: repeat(5, 1fr);
       .equals{
         grid-row: span 2;
+        align-self: center;
+        padding: 25px 0;
+        background-color: $color-light-2;
       }
     }
     .buttons-advance{
@@ -102,6 +114,6 @@ footer{
   .app-footer{
     font-size: 1em;
     font-family: "Source Code Pro", sans-serif;
-    padding: 30px 0;
+    padding: 30px 0 50px;
   }
 }

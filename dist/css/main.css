@@ -67,14 +67,14 @@ header {
   header .app-title {
     font-size: 2em;
     font-family: "Agency FB", sans-serif;
-    margin: 30px 0 20px; }
+    margin: 10vh 0 20px; }
     @media screen and (min-width: 1080px) {
       header .app-title {
         font-size: 3em; } }
   header .app-description {
     font-size: 1em;
     font-family: "Source Sans Pro", sans-serif;
-    margin-bottom: 30px; }
+    margin-bottom: 15vh; }
     @media screen and (min-width: 1080px) {
       header .app-description {
         font-size: 1.25em; } }
@@ -82,12 +82,13 @@ header {
 /*==================================== Main ====================================*/
 .calculator-wrapper {
   width: 768px;
-  margin: 0 auto 50px;
+  margin: 0 auto 20vh;
   background-color: #344669;
   padding: 25px; }
 
 .calculator-header {
-  border: black solid 1px; }
+  border: black solid 1px;
+  margin: 0 5px; }
   .calculator-header .output, .calculator-header .input {
     background-color: white;
     text-align: right;
@@ -102,26 +103,31 @@ header {
     padding-top: 15px;
     padding-bottom: 15px; }
 
-.calculator-buttons .buttons-top-row, .calculator-buttons .buttons-columns, .calculator-buttons .buttons-advance, .calculator-buttons .buttons-basic {
-  display: grid; }
-
-.calculator-buttons .buttons-top-row div, .calculator-buttons .buttons-basic div, .calculator-buttons .buttons-advance div {
-  background-color: #737373;
-  margin: 5px;
-  text-align: center;
-  padding: 5px 0; }
-
-.calculator-buttons .buttons-top-row {
-  grid-template-columns: repeat(7, 1fr); }
-
-.calculator-buttons .buttons-columns {
-  grid-template-columns: 1fr 2.5fr; }
-  .calculator-buttons .buttons-columns .buttons-basic {
-    grid-template-columns: repeat(5, 1fr); }
-    .calculator-buttons .buttons-columns .buttons-basic .equals {
-      grid-row: span 2; }
-  .calculator-buttons .buttons-columns .buttons-advance {
-    grid-template-columns: repeat(2, 1fr); }
+.calculator-buttons {
+  margin-top: 10px; }
+  .calculator-buttons .buttons-top-row, .calculator-buttons .buttons-columns, .calculator-buttons .buttons-advance, .calculator-buttons .buttons-basic {
+    display: grid; }
+  .calculator-buttons .buttons-top-row div, .calculator-buttons .buttons-basic div, .calculator-buttons .buttons-advance div {
+    background-color: #bfbfbf;
+    margin: 5px;
+    text-align: center;
+    padding: 5px 0;
+    cursor: pointer; }
+  .calculator-buttons .buttons-top-row .highlighted-btn, .calculator-buttons .buttons-basic .highlighted-btn, .calculator-buttons .buttons-advance .highlighted-btn {
+    background-color: #55bdff; }
+  .calculator-buttons .buttons-top-row {
+    grid-template-columns: repeat(7, 1fr); }
+  .calculator-buttons .buttons-columns {
+    grid-template-columns: 1fr 2.5fr; }
+    .calculator-buttons .buttons-columns .buttons-basic {
+      grid-template-columns: repeat(5, 1fr); }
+      .calculator-buttons .buttons-columns .buttons-basic .equals {
+        grid-row: span 2;
+        align-self: center;
+        padding: 25px 0;
+        background-color: #ff8d16; }
+    .calculator-buttons .buttons-columns .buttons-advance {
+      grid-template-columns: repeat(2, 1fr); }
 
 /*==================================== Footer ====================================*/
 footer {
@@ -131,4 +137,4 @@ footer {
   footer .app-footer {
     font-size: 1em;
     font-family: "Source Code Pro", sans-serif;
-    padding: 30px 0; }
+    padding: 30px 0 50px; }
