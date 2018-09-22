@@ -4,7 +4,7 @@
 
 /*==================================== General ====================================*/
 
-$bg-color : lighten(black, 40%);
+$bg-color : lighten(black, 45%);
 $color-dark : #344669;
 $text-color: white;
 
@@ -46,27 +46,52 @@ header{
   margin: 0 auto 50px;
   background-color: $color-dark;
   padding: 25px;
-  .calculator-header{
-    border: black solid 1px;
-  }
-  .output, .input{
+}
+.calculator-header {
+  border: black solid 1px;
+  .output, .input {
     background-color: white;
     text-align: right;
     padding-left: 20px;
     padding-right: 20px;
     font-family: "Source Code Pro", sans-serif;
   }
-  .output{
+  .output {
     font-size: 1.25em;
     padding-top: 10px;
   }
-  .input{
+  .input {
     font-size: 2em;
     padding-top: 15px;
     padding-bottom: 15px;
   }
-  .calculator-buttons{
-    height: 500px;
+}
+.calculator-buttons{
+  .buttons-top-row, .buttons-columns, .buttons-advance, .buttons-basic{
+    display: grid;
+  }
+  .buttons-top-row, .buttons-basic, .buttons-advance{
+    div{
+      background-color: $bg-color;
+      margin: 5px;
+      text-align: center;
+      padding: 5px 0;
+    }
+  }
+  .buttons-top-row{
+    grid-template-columns: repeat(7, 1fr);
+  }
+  .buttons-columns{
+    grid-template-columns: 1fr 2.5fr;
+    .buttons-basic{
+      grid-template-columns: repeat(5, 1fr);
+      .equals{
+        grid-row: span 2;
+      }
+    }
+    .buttons-advance{
+      grid-template-columns: repeat(2, 1fr);
+    }
   }
 }
 /*==================================== Footer ====================================*/

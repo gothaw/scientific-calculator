@@ -52,7 +52,7 @@ table {
 
 /*==================================== General ====================================*/
 body {
-  background-color: #666666;
+  background-color: #737373;
   box-sizing: border-box; }
 
 .inner {
@@ -85,23 +85,43 @@ header {
   margin: 0 auto 50px;
   background-color: #344669;
   padding: 25px; }
-  .calculator-wrapper .calculator-header {
-    border: black solid 1px; }
-  .calculator-wrapper .output, .calculator-wrapper .input {
+
+.calculator-header {
+  border: black solid 1px; }
+  .calculator-header .output, .calculator-header .input {
     background-color: white;
     text-align: right;
     padding-left: 20px;
     padding-right: 20px;
     font-family: "Source Code Pro", sans-serif; }
-  .calculator-wrapper .output {
+  .calculator-header .output {
     font-size: 1.25em;
     padding-top: 10px; }
-  .calculator-wrapper .input {
+  .calculator-header .input {
     font-size: 2em;
     padding-top: 15px;
     padding-bottom: 15px; }
-  .calculator-wrapper .calculator-buttons {
-    height: 500px; }
+
+.calculator-buttons .buttons-top-row, .calculator-buttons .buttons-columns, .calculator-buttons .buttons-advance, .calculator-buttons .buttons-basic {
+  display: grid; }
+
+.calculator-buttons .buttons-top-row div, .calculator-buttons .buttons-basic div, .calculator-buttons .buttons-advance div {
+  background-color: #737373;
+  margin: 5px;
+  text-align: center;
+  padding: 5px 0; }
+
+.calculator-buttons .buttons-top-row {
+  grid-template-columns: repeat(7, 1fr); }
+
+.calculator-buttons .buttons-columns {
+  grid-template-columns: 1fr 2.5fr; }
+  .calculator-buttons .buttons-columns .buttons-basic {
+    grid-template-columns: repeat(5, 1fr); }
+    .calculator-buttons .buttons-columns .buttons-basic .equals {
+      grid-row: span 2; }
+  .calculator-buttons .buttons-columns .buttons-advance {
+    grid-template-columns: repeat(2, 1fr); }
 
 /*==================================== Footer ====================================*/
 footer {
