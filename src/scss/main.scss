@@ -1,9 +1,82 @@
-/*=========General======*/
-//Test styling
+/*==================================== Imports ====================================*/
 
-$col1 : yellow;
+@import 'partials/reset';
+
+/*==================================== General ====================================*/
+
+$bg-color : lighten(black, 40%);
+$color-dark : #344669;
+$text-color: white;
 
 body{
-  background-color: lighten($col1, 30%);
-  font-weight: bold;
+  background-color: $bg-color;
+  box-sizing: border-box;
+}
+.inner{
+  max-width: 1080px;
+  margin: 0 auto;
+}
+
+/*==================================== Header ====================================*/
+
+header{
+  color: $text-color;
+  text-align: center;
+  padding: 0 5px;
+  .app-title{
+    font-size: 2em;
+    font-family: "Agency FB", sans-serif;
+    margin: 30px 0 20px;
+    @media screen and (min-width: 1080px){
+      font-size: 3em;
+    }
+  }
+  .app-description{
+    font-size: 1em;
+    font-family: "Source Sans Pro", sans-serif;
+    margin-bottom: 30px;
+    @media screen and (min-width: 1080px){
+      font-size: 1.25em;
+    }
+  }
+}
+/*==================================== Main ====================================*/
+.calculator-wrapper{
+  width: 768px;
+  margin: 0 auto 50px;
+  background-color: $color-dark;
+  padding: 25px;
+  .calculator-header{
+    border: black solid 1px;
+  }
+  .output, .input{
+    background-color: white;
+    text-align: right;
+    padding-left: 20px;
+    padding-right: 20px;
+    font-family: "Source Code Pro", sans-serif;
+  }
+  .output{
+    font-size: 1.25em;
+    padding-top: 10px;
+  }
+  .input{
+    font-size: 2em;
+    padding-top: 15px;
+    padding-bottom: 15px;
+  }
+  .calculator-buttons{
+    height: 500px;
+  }
+}
+/*==================================== Footer ====================================*/
+footer{
+  background-color: $color-dark;
+  color: $text-color;
+  text-align: center;
+  .app-footer{
+    font-size: 1em;
+    font-family: "Source Code Pro", sans-serif;
+    padding: 30px 0;
+  }
 }
