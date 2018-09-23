@@ -52,7 +52,9 @@ table {
 
 /*==================================== General ====================================*/
 body {
-  background-color: #737373;
+  background-color: #737373; }
+
+* {
   box-sizing: border-box; }
 
 .inner {
@@ -67,7 +69,8 @@ header {
   header .app-title {
     font-size: 2em;
     font-family: "Agency FB", sans-serif;
-    margin: 12vh 0 20px; }
+    margin: 12vh 0 20px;
+    color: #ff8d16; }
     @media screen and (min-width: 1080px) {
       header .app-title {
         font-size: 3em; } }
@@ -95,14 +98,16 @@ header {
     text-align: right;
     padding-left: 20px;
     padding-right: 20px;
-    font-family: "Source Code Pro", sans-serif; }
+    font-family: "Source Sans Pro", sans-serif; }
   .calculator-header .output {
     font-size: 1.25em;
-    padding-top: 10px; }
+    padding-top: 10px;
+    height: 30px; }
   .calculator-header .input {
     font-size: 2em;
     padding-top: 15px;
-    padding-bottom: 15px; }
+    padding-bottom: 15px;
+    height: 62px; }
 
 .calculator-buttons {
   margin-top: 10px; }

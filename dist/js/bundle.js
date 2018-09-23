@@ -97,14 +97,25 @@ eval("(function () {\r\n    const toggleBtn = document.getElementById(\"advance-
 
 /***/ }),
 
+/***/ "./src/js/modules/calculator.js":
+/*!**************************************!*\
+  !*** ./src/js/modules/calculator.js ***!
+  \**************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+eval("(function () {\r\n    const numberButtons = document.querySelectorAll(\".number\");\r\n    const outputField = document.querySelector(\".output\");\r\n    const inputField = document.querySelector(\".input\");\r\n\r\n    let number=\"0\";\r\n    let decimal=false;\r\n\r\n    function inputNumber(index){\r\n        if(inputField.innerHTML==='0')\r\n        {\r\n            inputField.innerHTML = '';\r\n        }\r\n        inputField.innerHTML+=numberButtons[index].textContent;\r\n        if(number===\"0\")\r\n        {\r\n            number=numberButtons[index].textContent;\r\n        }\r\n        else{\r\n            number+=numberButtons[index].textContent;\r\n        }\r\n        console.log(number);\r\n        return number;\r\n    }\r\n\r\n    function eventHandler() {\r\n        for(let i=0;i<numberButtons.length;i++){\r\n            numberButtons[i].addEventListener('click', function () {\r\n                inputNumber(i)\r\n            });\r\n        }\r\n    }\r\n    function init() {\r\n        eventHandler();\r\n    }\r\n\r\n    window.addEventListener(\"load\", init);\r\n})();\n\n//# sourceURL=webpack:///./src/js/modules/calculator.js?");
+
+/***/ }),
+
 /***/ 0:
-/*!*******************************!*\
-  !*** multi ./src/js/index.js ***!
-  \*******************************/
+/*!**************************************************************!*\
+  !*** multi ./src/js/index.js ./src/js/modules/calculator.js ***!
+  \**************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-eval("module.exports = __webpack_require__(/*! D:\\Dokumenty\\Training Dragon\\JavaScript\\_git\\scientific-calculator\\src\\js\\index.js */\"./src/js/index.js\");\n\n\n//# sourceURL=webpack:///multi_./src/js/index.js?");
+eval("__webpack_require__(/*! D:\\Dokumenty\\Training Dragon\\JavaScript\\_git\\scientific-calculator\\src\\js\\index.js */\"./src/js/index.js\");\nmodule.exports = __webpack_require__(/*! D:\\Dokumenty\\Training Dragon\\JavaScript\\_git\\scientific-calculator\\src\\js\\modules\\calculator.js */\"./src/js/modules/calculator.js\");\n\n\n//# sourceURL=webpack:///multi_./src/js/index.js_./src/js/modules/calculator.js?");
 
 /***/ })
 

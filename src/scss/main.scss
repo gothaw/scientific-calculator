@@ -13,6 +13,8 @@ $text-color: white;
 
 body{
   background-color: $bg-color;
+}
+*{
   box-sizing: border-box;
 }
 .inner{
@@ -30,6 +32,7 @@ header{
     font-size: 2em;
     font-family: "Agency FB", sans-serif;
     margin: 12vh 0 20px;
+    color: $color-light-2;
     @media screen and (min-width: 1080px){
       font-size: 3em;
     }
@@ -59,16 +62,20 @@ header{
     text-align: right;
     padding-left: 20px;
     padding-right: 20px;
-    font-family: "Source Code Pro", sans-serif;
+    font-family: "Source Sans Pro", sans-serif;
   }
   .output {
     font-size: 1.25em;
     padding-top: 10px;
+    height: 30px;
   }
   .input {
     font-size: 2em;
     padding-top: 15px;
     padding-bottom: 15px;
+    height: 62px;
+    //overflow-x: scroll;
+    //overflow-y: hidden;
   }
 }
 .calculator-buttons{
