@@ -128,7 +128,8 @@ header {
   .calculator-buttons .buttons-columns {
     grid-template-columns: 1fr 2.5fr; }
     .calculator-buttons .buttons-columns .buttons-basic {
-      grid-template-columns: repeat(5, 1fr); }
+      grid-template-columns: repeat(5, 1fr);
+      z-index: 10; }
       .calculator-buttons .buttons-columns .buttons-basic .equals {
         grid-row: span 2;
         align-self: center;
@@ -139,12 +140,22 @@ header {
         .calculator-buttons .buttons-columns .buttons-basic .equals:active {
           background-color: #55bdff; }
     .calculator-buttons .buttons-columns .buttons-advance {
-      grid-template-columns: repeat(2, 1fr); }
+      grid-template-columns: repeat(2, 1fr);
+      width: 100%; }
       .calculator-buttons .buttons-columns .buttons-advance .power {
         font-size: 1.25em; }
         .calculator-buttons .buttons-columns .buttons-advance .power span {
           vertical-align: super;
           font-size: smaller; }
+    .calculator-buttons .buttons-columns .advance-options-wrapper {
+      overflow: hidden; }
+      .calculator-buttons .buttons-columns .advance-options-wrapper .advance-options {
+        display: flex;
+        width: 200%;
+        height: 100%;
+        position: relative;
+        left: 0;
+        transition: all 0.4s; }
 
 /*==================================== Footer ====================================*/
 footer {

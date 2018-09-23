@@ -104,6 +104,7 @@ header{
     grid-template-columns: 1fr 2.5fr;
     .buttons-basic{
       grid-template-columns: repeat(5, 1fr);
+      z-index: 10;
       .equals{
         grid-row: span 2;
         align-self: center;
@@ -119,12 +120,24 @@ header{
     }
     .buttons-advance{
       grid-template-columns: repeat(2, 1fr);
+      width: 100%;
       .power{
         font-size: 1.25em;
         span{
           vertical-align: super;
           font-size: smaller;
         }
+      }
+    }
+    .advance-options-wrapper{
+      overflow: hidden;
+      .advance-options{
+        display: flex;
+        width: 200%;
+        height: 100%;
+        position: relative;
+        left: 0;
+        transition: all 0.4s;
       }
     }
   }
