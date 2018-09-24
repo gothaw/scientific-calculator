@@ -92,11 +92,12 @@ header {
 
 .calculator-header {
   border: black solid 1px;
+  position: relative;
   margin: 0 2px; }
   .calculator-header .output, .calculator-header .input {
     background-color: white;
     text-align: right;
-    padding-left: 20px;
+    padding-left: 55px;
     padding-right: 20px;
     font-family: "Source Sans Pro", sans-serif; }
   .calculator-header .output {
@@ -108,6 +109,27 @@ header {
     padding-top: 15px;
     padding-bottom: 15px;
     height: 62px; }
+  .calculator-header .angle-trigonometric-options {
+    position: absolute;
+    top: 0;
+    left: 0;
+    background-color: #fff;
+    width: 50px; }
+    .calculator-header .angle-trigonometric-options div {
+      font-family: "Source Sans Pro", sans-serif;
+      font-size: 1em;
+      text-align: center;
+      padding: 5px 0;
+      border: #344669 solid 1px;
+      margin-left: 10px;
+      background-color: #bfbfbf;
+      cursor: pointer;
+      transition: all 0.2s; }
+      .calculator-header .angle-trigonometric-options div:nth-child(1) {
+        margin-top: 10px;
+        margin-bottom: 5px; }
+      .calculator-header .angle-trigonometric-options div:active {
+        background-color: #ff8d16; }
 
 .calculator-buttons {
   margin-top: 10px; }

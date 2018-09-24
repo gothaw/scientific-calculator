@@ -56,11 +56,12 @@ header{
 }
 .calculator-header {
   border: black solid 1px;
+  position: relative;
   margin: 0 2px;
   .output, .input {
     background-color: white;
     text-align: right;
-    padding-left: 20px;
+    padding-left: 55px;
     padding-right: 20px;
     font-family: "Source Sans Pro", sans-serif;
   }
@@ -76,6 +77,31 @@ header{
     height: 62px;
     //overflow-x: scroll;
     //overflow-y: hidden;
+  }
+  .angle-trigonometric-options{
+    position: absolute;
+    top: 0;
+    left: 0;
+    background-color: #fff;
+    width: 50px;
+    div{
+      font-family: "Source Sans Pro", sans-serif;
+      font-size: 1em;
+      text-align: center;
+      padding: 5px 0;
+      border: $color-dark solid 1px;
+      margin-left: 10px;
+      background-color: $color-buttons;
+      cursor: pointer;
+      transition: all 0.2s;
+      &:nth-child(1){
+        margin-top: 10px;
+        margin-bottom: 5px;
+      }
+      &:active{
+        background-color: $color-light-2;
+      }
+    }
   }
 }
 .calculator-buttons{
