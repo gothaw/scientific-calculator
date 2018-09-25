@@ -116,11 +116,11 @@ header {
     background-color: #fff;
     width: 50px; }
     .calculator-header .angle-trigonometric-options div {
-      font-family: "Source Sans Pro", sans-serif;
+      font-family: "Agency FB", sans-serif;
       font-size: 1em;
       text-align: center;
       padding: 5px 0;
-      border: #344669 solid 1px;
+      border: #000 solid 1px;
       margin-left: 10px;
       background-color: #bfbfbf;
       cursor: pointer;

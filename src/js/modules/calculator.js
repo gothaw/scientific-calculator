@@ -1,12 +1,30 @@
 (function () {
-    const numberButtons = document.querySelectorAll(".number");
+    const basicButtons = document.querySelector(".buttons-basic").children;
     const outputField = document.querySelector(".output");
     const inputField = document.querySelector(".input");
 
-    let number="0";
-    let decimal=false;
+    console.log(basicButtons);
 
-    function inputNumber(index){
+    let inputArray=["0"];
+    
+
+    function basicButtonsEvent(index) {
+        switch (basicButtons[index].id) {
+            case "dot":
+                console.log(basicButtons[index].id);
+                console.log("test");
+                break;
+            default:
+                console.log(basicButtons[index].id);
+
+        }
+    }
+    
+    
+    
+    
+    
+    /*function inputNumber(index){
         if(inputField.innerHTML==='0')
         {
             inputField.innerHTML = '';
@@ -21,12 +39,12 @@
         }
         console.log(number);
         return number;
-    }
+    }*/
 
     function eventHandler() {
-        for(let i=0;i<numberButtons.length;i++){
-            numberButtons[i].addEventListener('click', function () {
-                inputNumber(i)
+        for(let i=0;i<basicButtons.length;i++){
+            basicButtons[i].addEventListener('click', function () {
+                basicButtonsEvent(i);
             });
         }
     }
