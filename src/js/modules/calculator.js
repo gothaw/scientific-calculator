@@ -1,26 +1,77 @@
 (function () {
-    const basicButtons = document.querySelector(".buttons-basic").children;
+    const basicButtons = document.querySelectorAll(".basic-btn");
     const outputField = document.querySelector(".output");
     const inputField = document.querySelector(".input");
 
     console.log(basicButtons);
 
-    let inputArray=["0"];
+    let inputStack=[];
     
 
     function basicButtonsEvent(index) {
         switch (basicButtons[index].id) {
+            case "backspace":
+
+                break;
+            case "clear-entry":
+
+                break;
+            case "clear":
+
+                break;
+            case "equals":
+
+                break;
+            case "divide":
+
+                break;
+            case "times":
+
+                break;
+            case "minus":
+
+                break;
+            case "plus":
+
+                break;
             case "dot":
-                console.log(basicButtons[index].id);
-                console.log("test");
+
                 break;
             default:
-                console.log(basicButtons[index].id);
-
+                addToInputStack(basicButtons[index].innerHTML);
         }
     }
-    
-    
+
+
+
+    function addToInputStack(token) {
+        if(isNaN(token)) {
+            if((token === "bracket-left" || token === "num-pi") && !isNaN(inputStack[inputStack.length - 1])) {
+                inputStack.push("op-multiply");
+            }
+            inputStack.push(token);
+        }
+        else if(!isNaN(inputStack[inputStack.length - 1]))
+        {
+            inputStack[inputStack.length - 1] = inputStack[inputStack.length - 1] + token;
+        }
+        else if(!isNaN(token) && (inputStack[inputStack.length - 1] === "bracket-right" || inputStack[inputStack.length - 1] === "num-pi"))
+        {
+            inputStack.push("op-multiply");
+        }
+        else
+        {
+            inputStack.push(token);
+        }
+        //displayEquation();
+        console.log(inputStack);
+    }
+
+
+
+
+
+
     
     
     
