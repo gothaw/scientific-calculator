@@ -3,39 +3,53 @@
     const outputField = document.querySelector(".output");
     const inputField = document.querySelector(".input");
 
-    console.log(basicButtons);
 
     let inputStack=[];
     
 
+    function calculate(stack) {
+
+    }
+
+
+
+
     function basicButtonsEvent(index) {
         switch (basicButtons[index].id) {
             case "backspace":
-
+                removeFromInputStack("backspace");
                 break;
             case "clear-entry":
-
+                removeFromInputStack("clear-entry");
                 break;
             case "clear":
-
+                removeFromInputStack("clear");
                 break;
             case "equals":
-
+                calculate(inputStack);
                 break;
             case "divide":
-
+                if(!isNaN(inputStack[inputStack.length-1])) {
+                    addToInputStack("/");
+                }
                 break;
             case "times":
-
+                if(!isNaN(inputStack[inputStack.length-1])) {
+                    addToInputStack("*");
+                }
                 break;
             case "minus":
-
+                if(!isNaN(inputStack[inputStack.length-1])) {
+                    addToInputStack("-");
+                }
                 break;
             case "plus":
-
+                if(!isNaN(inputStack[inputStack.length-1])) {
+                    addToInputStack("+");
+                }
                 break;
             case "dot":
-
+                addDecimalPoint();
                 break;
             default:
                 addToInputStack(basicButtons[index].innerHTML);
@@ -45,52 +59,53 @@
 
 
     function addToInputStack(token) {
-        if(isNaN(token)) {
-            if((token === "bracket-left" || token === "num-pi") && !isNaN(inputStack[inputStack.length - 1])) {
-                inputStack.push("op-multiply");
+        if (isNaN(token)&& inputStack.length===0){
+            displayInput(token);
+            inputStack.push("0", token);
+        }
+        else if((token === "(" || token === "pi") && !isNaN(inputStack[inputStack.length - 1])){
+            displayInput(`*${token}`);
+            inputStack.push("*", token);
+        }
+        else if(!isNaN(token) && (inputStack[inputStack.length - 1] === ")" || inputStack[inputStack.length - 1] === "num-pi")) {
+            displayInput(`*${token}`);
+            inputStack.push("*", token);
+        }
+        else if(!isNaN(token) && (!isNaN(inputStack[inputStack.length - 1]))) {
+            if ((token!==0)&&(inputStack[inputStack.length - 1] === "0")){
+                displayInput(token);
+                inputStack[inputStack.length - 1] = token;
             }
+            else if((inputStack[inputStack.length - 1] !== "0")){
+                displayInput(token);
+                inputStack[inputStack.length - 1] += token;
+            }
+        }
+        else {
+            displayInput(token);
             inputStack.push(token);
         }
-        else if(!isNaN(inputStack[inputStack.length - 1]))
-        {
-            inputStack[inputStack.length - 1] = inputStack[inputStack.length - 1] + token;
-        }
-        else if(!isNaN(token) && (inputStack[inputStack.length - 1] === "bracket-right" || inputStack[inputStack.length - 1] === "num-pi"))
-        {
-            inputStack.push("op-multiply");
-        }
-        else
-        {
-            inputStack.push(token);
-        }
-        //displayEquation();
         console.log(inputStack);
     }
 
+   function addDecimalPoint() {
+       if(isNaN(inputStack[inputStack.length - 1])) {
+           addToInputStack("0.");
+       }
+       else if(inputStack[inputStack.length - 1].indexOf(".") === -1) {
+           displayInput(".");
+           inputStack[inputStack.length - 1] += ".";
+       }
+   }
 
-
-
-
-
-    
-    
-    
-    /*function inputNumber(index){
-        if(inputField.innerHTML==='0')
-        {
-            inputField.innerHTML = '';
+    function displayInput(token) {
+        if((inputField.innerHTML.charAt(inputField.innerHTML.length-1)==="0")&&(!isNaN(token))){
+            inputField.innerHTML=inputField.innerHTML.slice(0,-1)+token;
         }
-        inputField.innerHTML+=numberButtons[index].textContent;
-        if(number==="0")
-        {
-            number=numberButtons[index].textContent;
+        else {
+            inputField.innerHTML+=token;
         }
-        else{
-            number+=numberButtons[index].textContent;
-        }
-        console.log(number);
-        return number;
-    }*/
+    }
 
     function eventHandler() {
         for(let i=0;i<basicButtons.length;i++){
