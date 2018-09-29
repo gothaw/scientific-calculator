@@ -1,24 +1,48 @@
 (function () {
     const basicButtons = document.querySelectorAll(".basic-btn");
+    const topRowButtons = document.querySelectorAll(".top-row-btn");
     const outputField = document.querySelector(".output");
     const inputField = document.querySelector(".input");
 
 
     let inputStack=[];
-    
+
+
 
     function calculate(stack) {
 
     }
 
+    function topRowButtonsEvent(index) {
+        switch (topRowButtons[index].id) {
+            case "backspace":
+                removeFromInputStack("backspace");
+                break;
+            case "bracket-right":
 
+                break;
+            case "bracket-left":
+
+                break;
+            case "plus-minus":
+
+                break;
+            case "sqrt":
+
+                break;
+            case "one-over-x":
+
+                break;
+            case "pi":
+
+                break;
+
+        }
+    }
 
 
     function basicButtonsEvent(index) {
         switch (basicButtons[index].id) {
-            case "backspace":
-                removeFromInputStack("backspace");
-                break;
             case "clear-entry":
                 removeFromInputStack("clear-entry");
                 break;
@@ -56,8 +80,6 @@
         }
     }
 
-
-
     function addToInputStack(token) {
         if (isNaN(token)&& inputStack.length===0){
             displayInput(token);
@@ -86,25 +108,6 @@
             inputStack.push(token);
         }
         console.log(inputStack);
-    }
-
-   function addDecimalPoint() {
-       if(isNaN(inputStack[inputStack.length - 1])) {
-           addToInputStack("0.");
-       }
-       else if(inputStack[inputStack.length - 1].indexOf(".") === -1) {
-           displayInput(".");
-           inputStack[inputStack.length - 1] += ".";
-       }
-   }
-
-    function displayInput(token) {
-        if((inputField.innerHTML.charAt(inputField.innerHTML.length-1)==="0")&&(!isNaN(token))){
-            inputField.innerHTML=inputField.innerHTML.slice(0,-1)+token;
-        }
-        else {
-            inputField.innerHTML+=token;
-        }
     }
 
     function removeFromInputStack(option) {
@@ -140,11 +143,36 @@
                 break;
         }
     }
-    
+
+    function addDecimalPoint() {
+       if(isNaN(inputStack[inputStack.length - 1])) {
+           addToInputStack("0.");
+       }
+       else if(inputStack[inputStack.length - 1].indexOf(".") === -1) {
+           displayInput(".");
+           inputStack[inputStack.length - 1] += ".";
+       }
+    }
+
+    function displayInput(token) {
+        if((inputField.innerHTML.charAt(inputField.innerHTML.length-1)==="0")&&(!isNaN(token))){
+            inputField.innerHTML=inputField.innerHTML.slice(0,-1)+token;
+        }
+        else {
+            inputField.innerHTML+=token;
+        }
+    }
+
+
     function eventHandler() {
         for(let i=0;i<basicButtons.length;i++){
             basicButtons[i].addEventListener('click', function () {
                 basicButtonsEvent(i);
+            });
+        }
+        for(let i=0;i<topRowButtons.length;i++){
+            topRowButtons[i].addEventListener('click', function () {
+                topRowButtonsEvent(i);
             });
         }
     }
