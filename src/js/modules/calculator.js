@@ -107,6 +107,40 @@
         }
     }
 
+    function removeFromInputStack(option) {
+        switch (option) {
+            case "backspace":
+                if((!isNaN(inputStack[inputStack.length - 1])))
+                {
+                    inputStack[inputStack.length - 1]=inputStack[inputStack.length - 1].slice(0,-1);
+                    if(inputStack[inputStack.length -1].length === 0) {
+                        inputStack.pop();
+                    }
+                }
+                else{
+                    inputStack.pop();
+                }
+                inputField.innerHTML=inputField.innerHTML.slice(0,-1);
+                console.log(inputStack);
+                if(inputStack.length===0)
+                {
+                    inputField.innerHTML="0";
+                }
+                break;
+            case "clear-entry":
+                inputStack=[];
+                inputField.innerHTML="0";
+                console.log(inputStack);
+                break;
+            case "clear":
+                inputStack=[];
+                inputField.innerHTML="0";
+                outputField.innerHTML="";
+                console.log(inputStack);
+                break;
+        }
+    }
+    
     function eventHandler() {
         for(let i=0;i<basicButtons.length;i++){
             basicButtons[i].addEventListener('click', function () {
