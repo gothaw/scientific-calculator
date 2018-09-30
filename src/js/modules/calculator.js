@@ -4,6 +4,9 @@
     const outputField = document.querySelector(".output");
     const inputField = document.querySelector(".input");
 
+    const basicOperations = ["+","-","*","/"];
+    const tokensForBasicOperations = [")","&pi;"];
+
 
     let inputStack=[];
     inputStack.push("0");
@@ -34,10 +37,16 @@
 
                 break;
             case "sqrt":
+                if(inputStack[0]==="0")
+                {
+                    inputStack.pop();
+                    inputField.innerHTML=""
+                }
                 addToInputStack("&radic;");
                 break;
             case "one-over-x":
-                addToInputStack("");
+                addToInputStack("1");
+                addToInputStack("/");
                 break;
             case "pi":
                 if(inputStack[0]==="0")
@@ -64,24 +73,16 @@
                 calculate(inputStack);
                 break;
             case "divide":
-                if(!isNaN(inputStack[inputStack.length-1])||inputStack[inputStack.length-1]==="&pi;") {
-                    addToInputStack("/");
-                }
+                addBasicOperation(basicOperations[3]);
                 break;
             case "times":
-                if(!isNaN(inputStack[inputStack.length-1])||inputStack[inputStack.length-1]==="&pi;") {
-                    addToInputStack("*");
-                }
+                addBasicOperation(basicOperations[2]);
                 break;
             case "minus":
-                if(!isNaN(inputStack[inputStack.length-1])||inputStack[inputStack.length-1]==="&pi;") {
-                    addToInputStack("-");
-                }
+                addBasicOperation(basicOperations[1]);
                 break;
             case "plus":
-                if(!isNaN(inputStack[inputStack.length-1])||inputStack[inputStack.length-1]==="&pi;") {
-                    addToInputStack("+");
-                }
+                addBasicOperation(basicOperations[0]);
                 break;
             case "dot":
                 addDecimalPoint();
@@ -92,11 +93,11 @@
     }
 
     function addToInputStack(token) {
-        if((token === "(" || token === "&pi;") && (!isNaN(inputStack[inputStack.length - 1])||inputStack[inputStack.length - 1]==="&pi;")){
+        if(isNaN(token) && !(basicOperations.includes(token)) && token!==")" && (!isNaN(inputStack[inputStack.length - 1])||inputStack[inputStack.length - 1]==="&pi;")){
             displayInput(`*${token}`);
             inputStack.push("*", token);
         }
-        else if((!isNaN(token)|| token === "(" || token === "&pi;") && (inputStack[inputStack.length - 1] === ")" || inputStack[inputStack.length - 1] === "&pi;")) {
+        else if(!(basicOperations.includes(token)) && token!==")" && (inputStack[inputStack.length - 1] === ")" || inputStack[inputStack.length - 1] === "&pi;")) {
             displayInput(`*${token}`);
             inputStack.push("*", token);
         }
@@ -115,6 +116,15 @@
             inputStack.push(token);
         }
         console.log(inputStack);
+    }
+
+    function displayInput(token) {
+        if(inputField.innerHTML.charAt(inputField.innerHTML.length-1)==="0"&&!isNaN(token)){
+            inputField.innerHTML=inputField.innerHTML.slice(0,-1)+token;
+        }
+        else {
+            inputField.innerHTML+=token;
+        }
     }
 
     function removeFromInputStack(option) {
@@ -163,12 +173,9 @@
        }
     }
 
-    function displayInput(token) {
-        if(inputField.innerHTML.charAt(inputField.innerHTML.length-1)==="0"&&!isNaN(token)){
-            inputField.innerHTML=inputField.innerHTML.slice(0,-1)+token;
-        }
-        else {
-            inputField.innerHTML+=token;
+    function addBasicOperation(token) {
+        if(!isNaN(inputStack[inputStack.length-1]) || tokensForBasicOperations.includes(inputStack[inputStack.length-1])) {
+            addToInputStack(token);
         }
     }
 
@@ -177,15 +184,21 @@
         let rightBracketsCount=0;
         for(let token of inputStack){
             if(token==="("){
-                leftBracketsCount++
+                leftBracketsCount++;
             }
             if(token===")"){
-                rightBracketsCount++
+                rightBracketsCount++;
             }
         }
-        if(leftBracketsCount!==0 && rightBracketsCount<leftBracketsCount){
+        console.log(leftBracketsCount);
+        if ((!isNaN(inputStack[inputStack.length-1]) || inputStack[inputStack.length-1]==="&pi;") && rightBracketsCount<leftBracketsCount)
+        {
             addToInputStack(")")
         }
+    }
+
+    function addOneOverX() {
+
     }
 
     function eventHandler() {
