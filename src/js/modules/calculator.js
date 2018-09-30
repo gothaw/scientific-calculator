@@ -45,8 +45,7 @@
                 addToInputStack("&radic;");
                 break;
             case "one-over-x":
-                addToInputStack("1");
-                addToInputStack("/");
+                addOneOverX();
                 break;
             case "pi":
                 if(inputStack[0]==="0")
@@ -198,7 +197,11 @@
     }
 
     function addOneOverX() {
-
+        if(!isNaN(inputStack[inputStack.length-1]) && inputStack[0]!=="0"){
+            addBasicOperation(basicOperations[2]);
+        }
+        addToInputStack("1");
+        addBasicOperation(basicOperations[3]);
     }
 
     function eventHandler() {
