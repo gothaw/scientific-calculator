@@ -6,8 +6,9 @@
 
 
     let inputStack=[];
+    inputStack.push("0");
 
-
+    console.log(inputStack);
 
     function calculate(stack) {
 
@@ -19,24 +20,34 @@
                 removeFromInputStack("backspace");
                 break;
             case "bracket-right":
-
+                addRightBracket();
                 break;
             case "bracket-left":
-
+                if(inputStack[0]==="0")
+                {
+                    inputStack.pop();
+                    inputField.innerHTML=""
+                }
+                addToInputStack("(");
                 break;
             case "plus-minus":
 
                 break;
             case "sqrt":
-
+                addToInputStack("&radic;");
                 break;
             case "one-over-x":
-
+                addToInputStack("");
                 break;
             case "pi":
-
+                if(inputStack[0]==="0")
+                {
+                    inputStack.pop();
+                    inputField.innerHTML=""
+                }
+                addToInputStack("&pi;");
                 break;
-
+            default:
         }
     }
 
@@ -53,22 +64,22 @@
                 calculate(inputStack);
                 break;
             case "divide":
-                if(!isNaN(inputStack[inputStack.length-1])) {
+                if(!isNaN(inputStack[inputStack.length-1])||inputStack[inputStack.length-1]==="&pi;") {
                     addToInputStack("/");
                 }
                 break;
             case "times":
-                if(!isNaN(inputStack[inputStack.length-1])) {
+                if(!isNaN(inputStack[inputStack.length-1])||inputStack[inputStack.length-1]==="&pi;") {
                     addToInputStack("*");
                 }
                 break;
             case "minus":
-                if(!isNaN(inputStack[inputStack.length-1])) {
+                if(!isNaN(inputStack[inputStack.length-1])||inputStack[inputStack.length-1]==="&pi;") {
                     addToInputStack("-");
                 }
                 break;
             case "plus":
-                if(!isNaN(inputStack[inputStack.length-1])) {
+                if(!isNaN(inputStack[inputStack.length-1])||inputStack[inputStack.length-1]==="&pi;") {
                     addToInputStack("+");
                 }
                 break;
@@ -81,15 +92,11 @@
     }
 
     function addToInputStack(token) {
-        if (isNaN(token)&& inputStack.length===0){
-            displayInput(token);
-            inputStack.push("0", token);
-        }
-        else if((token === "(" || token === "pi") && !isNaN(inputStack[inputStack.length - 1])){
+        if((token === "(" || token === "&pi;") && (!isNaN(inputStack[inputStack.length - 1])||inputStack[inputStack.length - 1]==="&pi;")){
             displayInput(`*${token}`);
             inputStack.push("*", token);
         }
-        else if(!isNaN(token) && (inputStack[inputStack.length - 1] === ")" || inputStack[inputStack.length - 1] === "num-pi")) {
+        else if((!isNaN(token)|| token === "(" || token === "&pi;") && (inputStack[inputStack.length - 1] === ")" || inputStack[inputStack.length - 1] === "&pi;")) {
             displayInput(`*${token}`);
             inputStack.push("*", token);
         }
@@ -124,23 +131,25 @@
                     inputStack.pop();
                 }
                 inputField.innerHTML=inputField.innerHTML.slice(0,-1);
-                console.log(inputStack);
                 if(inputStack.length===0)
                 {
                     inputField.innerHTML="0";
+                    inputStack.push("0");
                 }
+                console.log(inputStack);
                 break;
             case "clear-entry":
-                inputStack=[];
+                inputStack=["0"];
                 inputField.innerHTML="0";
                 console.log(inputStack);
                 break;
             case "clear":
-                inputStack=[];
+                inputStack=["0"];
                 inputField.innerHTML="0";
                 outputField.innerHTML="";
                 console.log(inputStack);
                 break;
+            default:
         }
     }
 
@@ -155,7 +164,7 @@
     }
 
     function displayInput(token) {
-        if((inputField.innerHTML.charAt(inputField.innerHTML.length-1)==="0")&&(!isNaN(token))){
+        if(inputField.innerHTML.charAt(inputField.innerHTML.length-1)==="0"&&!isNaN(token)){
             inputField.innerHTML=inputField.innerHTML.slice(0,-1)+token;
         }
         else {
@@ -163,6 +172,21 @@
         }
     }
 
+    function addRightBracket(){
+        let leftBracketsCount=0;
+        let rightBracketsCount=0;
+        for(let token of inputStack){
+            if(token==="("){
+                leftBracketsCount++
+            }
+            if(token===")"){
+                rightBracketsCount++
+            }
+        }
+        if(leftBracketsCount!==0 && rightBracketsCount<leftBracketsCount){
+            addToInputStack(")")
+        }
+    }
 
     function eventHandler() {
         for(let i=0;i<basicButtons.length;i++){
@@ -176,6 +200,7 @@
             });
         }
     }
+
     function init() {
         eventHandler();
     }
