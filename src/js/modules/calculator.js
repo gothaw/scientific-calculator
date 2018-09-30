@@ -1,6 +1,7 @@
 (function () {
     const basicButtons = document.querySelectorAll(".basic-btn");
     const topRowButtons = document.querySelectorAll(".top-row-btn");
+    const advanceButtons = document.querySelectorAll(".advance-btn");
     const outputField = document.querySelector(".output");
     const inputField = document.querySelector(".input");
 
@@ -17,8 +18,58 @@
 
     }
 
-    function advanceButtonsEvent() {
-
+    function advanceButtonsEvent(index) {
+        switch (advanceButtons[index].id) {
+            case "x-to-y":
+                alert(advanceButtons[index].id);
+                break;
+            case "x-square":
+                alert(advanceButtons[index].id);
+                break;
+            case "10-to-x":
+                alert(advanceButtons[index].id);
+                break;
+            case "tan":
+                alert(advanceButtons[index].id);
+                break;
+            case "log":
+                alert(advanceButtons[index].id);
+                break;
+            case "cos":
+                alert(advanceButtons[index].id);
+                break;
+            case "mod":
+                alert(advanceButtons[index].id);
+                break;
+            case "sin":
+                alert(advanceButtons[index].id);
+                break;
+            case "x-root":
+                alert(advanceButtons[index].id);
+                break;
+            case "x-cube":
+                alert(advanceButtons[index].id);
+                break;
+            case "e-x":
+                alert(advanceButtons[index].id);
+                break;
+            case "atan":
+                alert(advanceButtons[index].id);
+                break;
+            case "ln":
+                alert(advanceButtons[index].id);
+                break;
+            case "acos":
+                alert(advanceButtons[index].id);
+                break;
+            case "n!":
+                alert(advanceButtons[index].id);
+                break;
+            case "asin":
+                alert(advanceButtons[index].id);
+                break;
+            default:
+        }
     }
 
     function topRowButtonsEvent(index) {
@@ -194,7 +245,7 @@
             }
         }
         console.log(leftBracketsCount);
-        if ((!isNaN(inputStack[inputStack.length-1]) || inputStack[inputStack.length-1]==="&pi;") && rightBracketsCount<leftBracketsCount)
+        if ((!isNaN(inputStack[inputStack.length-1]) || inputStack[inputStack.length-1]==="&pi;" || inputStack[inputStack.length-1]===")") && rightBracketsCount<leftBracketsCount)
         {
             addToInputStack(")")
         }
@@ -259,6 +310,11 @@
         for(let i=0;i<topRowButtons.length;i++){
             topRowButtons[i].addEventListener('click', function () {
                 topRowButtonsEvent(i);
+            });
+        }
+        for(let i=0;i<advanceButtons.length;i++){
+            advanceButtons[i].addEventListener('click', function () {
+                advanceButtonsEvent(i);
             });
         }
     }
