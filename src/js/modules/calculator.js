@@ -17,6 +17,10 @@
 
     }
 
+    function advanceButtonsEvent() {
+
+    }
+
     function topRowButtonsEvent(index) {
         switch (topRowButtons[index].id) {
             case "backspace":
@@ -34,7 +38,7 @@
                 addToInputStack("(");
                 break;
             case "plus-minus":
-
+                plusMinus();
                 break;
             case "sqrt":
                 if(inputStack[0]==="0")
@@ -203,6 +207,48 @@
         addToInputStack("1");
         addBasicOperation(basicOperations[3]);
     }
+
+    function plusMinus() {
+        if(!isNaN(inputStack[inputStack.length-1]) || inputStack[inputStack.length-1]==="&pi;"){
+            let index;
+            if(inputStack[inputStack.length-2]==="+"){
+                index=inputField.innerHTML.lastIndexOf("+");
+                inputField.innerHTML=inputField.innerHTML.slice(0,index)+"-"+inputField.innerHTML.slice(index+1,inputField.innerHTML.length);
+                inputStack[inputStack.length-2]="-";
+            }
+            else if(inputStack[inputStack.length-2]==="-"){
+                index=inputField.innerHTML.lastIndexOf("-");
+                inputField.innerHTML=inputField.innerHTML.slice(0,index)+"+"+inputField.innerHTML.slice(index+1,inputField.innerHTML.length);
+                inputStack[inputStack.length-2]="+";
+            }
+            else if (inputStack[inputStack.length-1]!=="0"){
+                let lastNumberInStack=inputStack[inputStack.length-1];
+                if(inputStack[inputStack.length-2]==="+/-"){
+                    index=inputField.innerHTML.lastIndexOf("-");
+                    inputField.innerHTML=inputField.innerHTML.slice(0,index)+inputField.innerHTML.slice(index+1,inputField.innerHTML.length);
+                    inputStack.splice(-2);
+                    inputStack.push(lastNumberInStack);
+                }
+                else{
+                    index=inputField.innerHTML.lastIndexOf(lastNumberInStack);
+                    inputField.innerHTML=inputField.innerHTML.slice(0,index)+"-"+inputField.innerHTML.slice(index,inputField.innerHTML.length);
+                    inputStack.pop();
+                    inputStack.push("+/-",lastNumberInStack);
+                }
+            }
+        }
+        else if(inputStack[inputStack.length-1]==="+") {
+            inputStack[inputStack.length-1]="-";
+            inputField.innerHTML=inputField.innerHTML.slice(0,-1)+"-";
+        }
+        else if(inputStack[inputStack.length-1]==="-"){
+            inputStack[inputStack.length-1]="+";
+            inputField.innerHTML=inputField.innerHTML.slice(0,-1)+"+";
+        }
+        console.log(inputStack);
+    }
+
+
 
     function eventHandler() {
         for(let i=0;i<basicButtons.length;i++){
