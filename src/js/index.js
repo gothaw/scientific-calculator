@@ -1,9 +1,28 @@
 (function () {
     const toggleBtn = document.getElementById("advance-options-toggle");
     const advanceOptions = document.getElementsByClassName("advance-options")[0];
+    const triHypFunctionBtn = document.getElementById("tri-hyp");
+    const triHypFunctions = document.getElementsByClassName("tri-hyp-function");
+
+    console.log(triHypFunctions);
 
     //true is second tab of advance options is shown
     let secondTab   = false;
+
+    function triHypOptions() {
+        if(triHypFunctionBtn.innerHTML==="tri"){
+            triHypFunctionBtn.innerHTML="hyp";
+            for(let btn of triHypFunctions){
+                btn.innerHTML+="h"
+            }
+        }
+        else if(triHypFunctionBtn.innerHTML==="hyp"){
+            triHypFunctionBtn.innerHTML="tri";
+            for(let btn of triHypFunctions){
+                btn.innerHTML=btn.innerHTML.slice(0,-1);
+            }
+        }
+    }
 
     /**
      * @name    showOptions
@@ -24,6 +43,7 @@
 
     function eventHandler() {
         toggleBtn.addEventListener("click",showOptions);
+        triHypFunctionBtn.addEventListener("click",triHypOptions);
     }
 
     function init() {

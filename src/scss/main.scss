@@ -162,8 +162,9 @@ header{
     .buttons-advance{
       grid-template-columns: repeat(2, 1fr);
       width: 100%;
-      .power{
+      div{
         font-size: 1.25em;
+        min-height: 34px;
         span{
           vertical-align: super;
           font-size: smaller;

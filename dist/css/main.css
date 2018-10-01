@@ -177,9 +177,10 @@ header {
     .calculator-buttons .buttons-columns .buttons-advance {
       grid-template-columns: repeat(2, 1fr);
       width: 100%; }
-      .calculator-buttons .buttons-columns .buttons-advance .power {
-        font-size: 1.25em; }
-        .calculator-buttons .buttons-columns .buttons-advance .power span {
+      .calculator-buttons .buttons-columns .buttons-advance div {
+        font-size: 1.25em;
+        min-height: 34px; }
+        .calculator-buttons .buttons-columns .buttons-advance div span {
           vertical-align: super;
           font-size: smaller; }
     .calculator-buttons .buttons-columns .advance-options-wrapper {
