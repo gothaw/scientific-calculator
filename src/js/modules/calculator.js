@@ -4,6 +4,8 @@
     const advanceButtons = document.querySelectorAll(".advance-btn");
     const outputField = document.querySelector(".output");
     const inputField = document.querySelector(".input");
+    const triHypFunctions = document.querySelectorAll(".tri-hyp-function");
+
 
     const basicOperations = ["+","-","*","/"];
     const tokensForBasicOperations = [")","&pi;"];
@@ -21,52 +23,64 @@
     function advanceButtonsEvent(index) {
         switch (advanceButtons[index].id) {
             case "x-to-y":
-                alert(advanceButtons[index].id);
+
                 break;
             case "x-square":
-                alert(advanceButtons[index].id);
+
                 break;
             case "10-to-x":
-                alert(advanceButtons[index].id);
+
                 break;
             case "tan":
-                alert(advanceButtons[index].id);
+                initialClear();
+                addToInputStack(triHypFunctions[0].innerHTML);
+                addToInputStack("(");
                 break;
             case "log":
-                alert(advanceButtons[index].id);
+
                 break;
             case "cos":
-                alert(advanceButtons[index].id);
+                initialClear();
+                addToInputStack(triHypFunctions[1].innerHTML);
+                addToInputStack("(");
                 break;
             case "mod":
                 alert(advanceButtons[index].id);
                 break;
             case "sin":
-                alert(advanceButtons[index].id);
+                initialClear();
+                addToInputStack(triHypFunctions[2].innerHTML);
+                addToInputStack("(");
                 break;
             case "x-root":
-                alert(advanceButtons[index].id);
+
                 break;
             case "x-cube":
-                alert(advanceButtons[index].id);
+
                 break;
             case "e-x":
-                alert(advanceButtons[index].id);
+
                 break;
             case "atan":
-                alert(advanceButtons[index].id);
+                initialClear();
+                addToInputStack(triHypFunctions[3].innerHTML);
+                addToInputStack("(");
                 break;
             case "ln":
-                alert(advanceButtons[index].id);
+
                 break;
             case "acos":
-                alert(advanceButtons[index].id);
+                initialClear();
+                addToInputStack(triHypFunctions[4].innerHTML);
+                addToInputStack("(");
                 break;
             case "n!":
-                alert(advanceButtons[index].id);
+
                 break;
             case "asin":
-                alert(advanceButtons[index].id);
+                initialClear();
+                addToInputStack(triHypFunctions[5].innerHTML);
+                addToInputStack("(");
                 break;
             default:
         }
@@ -81,33 +95,22 @@
                 addRightBracket();
                 break;
             case "bracket-left":
-                if(inputStack[0]==="0")
-                {
-                    inputStack.pop();
-                    inputField.innerHTML=""
-                }
+                initialClear();
                 addToInputStack("(");
                 break;
             case "plus-minus":
                 plusMinus();
                 break;
             case "sqrt":
-                if(inputStack[0]==="0")
-                {
-                    inputStack.pop();
-                    inputField.innerHTML=""
-                }
+                initialClear();
                 addToInputStack("&radic;");
+                addToInputStack("(");
                 break;
             case "one-over-x":
                 addOneOverX();
                 break;
             case "pi":
-                if(inputStack[0]==="0")
-                {
-                    inputStack.pop();
-                    inputField.innerHTML=""
-                }
+                initialClear();
                 addToInputStack("&pi;");
                 break;
             default:
@@ -186,15 +189,16 @@
             case "backspace":
                 if((!isNaN(inputStack[inputStack.length - 1])))
                 {
+                    inputField.innerHTML=inputField.innerHTML.slice(0,-1);
                     inputStack[inputStack.length - 1]=inputStack[inputStack.length - 1].slice(0,-1);
                     if(inputStack[inputStack.length -1].length === 0) {
                         inputStack.pop();
                     }
                 }
                 else{
+                    inputField.innerHTML=inputField.innerHTML.slice(0,inputField.innerHTML.lastIndexOf(inputStack[inputStack.length - 1]));
                     inputStack.pop();
                 }
-                inputField.innerHTML=inputField.innerHTML.slice(0,-1);
                 if(inputStack.length===0)
                 {
                     inputField.innerHTML="0";
@@ -299,6 +303,13 @@
         console.log(inputStack);
     }
 
+    function initialClear(){
+        if(inputStack[0]==="0")
+        {
+            inputStack.pop();
+            inputField.innerHTML=""
+        }
+    }
 
 
     function eventHandler() {
