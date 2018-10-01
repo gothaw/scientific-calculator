@@ -4,11 +4,13 @@
     const triHypFunctionBtn = document.getElementById("tri-hyp");
     const triHypFunctions = document.getElementsByClassName("tri-hyp-function");
 
-    console.log(triHypFunctions);
-
     //true is second tab of advance options is shown
     let secondTab   = false;
 
+    /**
+     * @name    triHypFunctions
+     * @desc    toggles between trigonometric and hyperbolic options for advance functions, modifies inner HTML for these functions
+     */
     function triHypOptions() {
         if(triHypFunctionBtn.innerHTML==="tri"){
             triHypFunctionBtn.innerHTML="hyp";
