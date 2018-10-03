@@ -317,7 +317,7 @@
     }
 
     function addFactorial() {
-        if (!isNaN(inputStack[inputStack.length-1]) || inputStack[inputStack.length-1]==="&pi;" || inputStack[inputStack.length-1]===")"){
+        if (!isNaN(inputStack[inputStack.length-1]) || tokensBeforeBasicOperations.includes(inputStack[inputStack.length-1])){
             addToInputStack("!")
         }
     }
