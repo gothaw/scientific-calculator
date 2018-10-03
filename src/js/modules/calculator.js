@@ -8,8 +8,9 @@
 
 
     const basicOperations = ["+","-","*","/"];
-    const tokensForBasicOperations = [")","&pi;"];
-
+    const tokensNotPreMultiplied = ["+","-","*","/",")","^","!"];
+    //tokens before basic operations, before right bracket, factorial and tokens which are post multiplied
+    const tokensBeforeBasicOperations = [")","&pi;","e","!"];
 
     let inputStack=[];
     inputStack.push("0");
@@ -37,7 +38,9 @@
                 addToInputStack("(");
                 break;
             case "log":
-
+                initialClear();
+                addToInputStack("log");
+                addToInputStack("(");
                 break;
             case "cos":
                 initialClear();
@@ -67,7 +70,9 @@
                 addToInputStack("(");
                 break;
             case "ln":
-
+                initialClear();
+                addToInputStack("ln");
+                addToInputStack("(");
                 break;
             case "acos":
                 initialClear();
@@ -75,7 +80,7 @@
                 addToInputStack("(");
                 break;
             case "n!":
-
+                addFactorial();
                 break;
             case "asin":
                 initialClear();
@@ -150,11 +155,11 @@
     }
 
     function addToInputStack(token) {
-        if(isNaN(token) && !(basicOperations.includes(token)) && token!==")" && (!isNaN(inputStack[inputStack.length - 1])||inputStack[inputStack.length - 1]==="&pi;")){
+        if(isNaN(token) && !(tokensNotPreMultiplied.includes(token)) && !isNaN(inputStack[inputStack.length - 1])){
             displayInput(`*${token}`);
             inputStack.push("*", token);
         }
-        else if(!(basicOperations.includes(token)) && token!==")" && (inputStack[inputStack.length - 1] === ")" || inputStack[inputStack.length - 1] === "&pi;")) {
+        else if(!(tokensNotPreMultiplied.includes(token)) && tokensBeforeBasicOperations.includes(inputStack[inputStack.length - 1])) {
             displayInput(`*${token}`);
             inputStack.push("*", token);
         }
@@ -173,6 +178,14 @@
             inputStack.push(token);
         }
         console.log(inputStack);
+    }
+
+    function initialClear(){
+        if(inputStack[0]==="0")
+        {
+            inputStack.pop();
+            inputField.innerHTML=""
+        }
     }
 
     function displayInput(token) {
@@ -232,7 +245,7 @@
     }
 
     function addBasicOperation(token) {
-        if(!isNaN(inputStack[inputStack.length-1]) || tokensForBasicOperations.includes(inputStack[inputStack.length-1])) {
+        if(!isNaN(inputStack[inputStack.length-1]) || tokensBeforeBasicOperations.includes(inputStack[inputStack.length-1])) {
             addToInputStack(token);
         }
     }
@@ -249,7 +262,7 @@
             }
         }
         console.log(leftBracketsCount);
-        if ((!isNaN(inputStack[inputStack.length-1]) || inputStack[inputStack.length-1]==="&pi;" || inputStack[inputStack.length-1]===")") && rightBracketsCount<leftBracketsCount)
+        if ((!isNaN(inputStack[inputStack.length-1]) || tokensBeforeBasicOperations.includes(inputStack[inputStack.length-1])) && rightBracketsCount<leftBracketsCount)
         {
             addToInputStack(")")
         }
@@ -303,13 +316,14 @@
         console.log(inputStack);
     }
 
-    function initialClear(){
-        if(inputStack[0]==="0")
-        {
-            inputStack.pop();
-            inputField.innerHTML=""
+    function addFactorial() {
+        if (!isNaN(inputStack[inputStack.length-1]) || inputStack[inputStack.length-1]==="&pi;" || inputStack[inputStack.length-1]===")"){
+            addToInputStack("!")
         }
     }
+
+
+
 
 
     function eventHandler() {
