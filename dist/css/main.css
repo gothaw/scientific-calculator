@@ -61,6 +61,14 @@ body {
   max-width: 1080px;
   margin: 0 auto; }
 
+sup {
+  vertical-align: super;
+  font-size: smaller;
+  min-width: 5px; }
+
+sup {
+  background-color: red; }
+
 /*==================================== Header ====================================*/
 header {
   color: white;

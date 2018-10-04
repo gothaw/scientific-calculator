@@ -30,7 +30,9 @@
 
                 break;
             case "10-to-x":
-
+                initialClear();
+                addToInputStack("10");
+                addPowerFunction();
                 break;
             case "tan":
                 initialClear();
@@ -322,7 +324,15 @@
         }
     }
 
+    function addPowerFunction() {
+        let superscript = document.createElement("SUP");
+        let text = document.createTextNode("");
+        superscript.appendChild(text);
+        inputField.appendChild(superscript);
 
+
+
+    }
 
 
 

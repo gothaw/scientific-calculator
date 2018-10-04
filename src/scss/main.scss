@@ -10,6 +10,7 @@ $color-dark : #344669;
 $color-light-1: #55bdff;
 $color-light-2: #ff8d16;
 $text-color: white;
+$width: 5px;
 
 body{
   background-color: $bg-color;
@@ -20,6 +21,17 @@ body{
 .inner{
   max-width: 1080px;
   margin: 0 auto;
+}
+sup {
+  vertical-align: super;
+  font-size: smaller;
+  min-width: $width;
+}
+
+@if $width==5px{
+  sup{
+    background-color: red;
+  }
 }
 
 /*==================================== Header ====================================*/
@@ -184,6 +196,7 @@ header{
     }
   }
 }
+
 /*==================================== Footer ====================================*/
 footer{
   background-color: $color-dark;
