@@ -63,11 +63,7 @@ body {
 
 sup {
   vertical-align: super;
-  font-size: smaller;
-  min-width: 5px; }
-
-sup {
-  background-color: red; }
+  font-size: smaller; }
 
 /*==================================== Header ====================================*/
 header {
@@ -100,10 +96,10 @@ header {
 
 .calculator-header {
   border: black solid 1px;
+  background-color: white;
   position: relative;
   margin: 0 2px; }
   .calculator-header .output, .calculator-header .input {
-    background-color: white;
     text-align: right;
     padding-left: 55px;
     padding-right: 20px;
@@ -116,13 +112,15 @@ header {
     font-size: 2em;
     padding-top: 15px;
     padding-bottom: 15px;
-    height: 62px; }
+    overflow-x: auto;
+    overflow-y: hidden; }
   .calculator-header .angle-trigonometric-options {
     position: absolute;
     top: 0;
     left: 0;
     background-color: #fff;
-    width: 50px; }
+    width: 50px;
+    height: 85%; }
     .calculator-header .angle-trigonometric-options div {
       font-family: "Agency FB", sans-serif;
       font-size: 1em;
@@ -188,9 +186,6 @@ header {
       .calculator-buttons .buttons-columns .buttons-advance div {
         font-size: 1.25em;
         min-height: 34px; }
-        .calculator-buttons .buttons-columns .buttons-advance div span {
-          vertical-align: super;
-          font-size: smaller; }
     .calculator-buttons .buttons-columns .advance-options-wrapper {
       overflow: hidden; }
       .calculator-buttons .buttons-columns .advance-options-wrapper .advance-options {

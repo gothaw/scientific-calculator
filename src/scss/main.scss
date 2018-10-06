@@ -25,13 +25,6 @@ body{
 sup {
   vertical-align: super;
   font-size: smaller;
-  min-width: $width;
-}
-
-@if $width==5px{
-  sup{
-    background-color: red;
-  }
 }
 
 /*==================================== Header ====================================*/
@@ -68,10 +61,10 @@ header{
 }
 .calculator-header {
   border: black solid 1px;
+  background-color: white;
   position: relative;
   margin: 0 2px;
   .output, .input {
-    background-color: white;
     text-align: right;
     padding-left: 55px;
     padding-right: 20px;
@@ -86,9 +79,8 @@ header{
     font-size: 2em;
     padding-top: 15px;
     padding-bottom: 15px;
-    height: 62px;
-    //overflow-x: scroll;
-    //overflow-y: hidden;
+    overflow-x: auto;
+    overflow-y: hidden;
   }
   .angle-trigonometric-options{
     position: absolute;
@@ -96,6 +88,7 @@ header{
     left: 0;
     background-color: #fff;
     width: 50px;
+    height: 85%;
     div{
       font-family: "Agency FB", sans-serif;
       font-size: 1em;
@@ -177,10 +170,6 @@ header{
       div{
         font-size: 1.25em;
         min-height: 34px;
-        span{
-          vertical-align: super;
-          font-size: smaller;
-        }
       }
     }
     .advance-options-wrapper{
