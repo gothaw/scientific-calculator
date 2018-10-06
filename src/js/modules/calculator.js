@@ -19,6 +19,8 @@
 
     console.log(inputStack);
 
+    let inputTag=inputField;
+
     function calculate(stack) {
 
     }
@@ -186,51 +188,101 @@
     }
 
     function initialClear(){
-        if(inputStack[0]==="0")
+        if(inputStack[0]==="0" && inputField.length===1)
         {
             inputStack.pop();
             inputField.innerHTML=""
         }
     }
 
-    function displayInput(token, field=inputField) {
-        if (field.innerHTML.includes("sup"))
+    function displayInput(token) {
+        if (inputTag.innerHTML.includes("sup") && inputTag.innerHTML.lastIndexOf("sup")===inputTag.innerHTML.length-4)
         {
-            if (field.innerHTML.lastIndexOf("sup")===field.innerHTML.length-4){
-                displayInput(token,field.lastChild);
-            }
+            inputTag=inputTag.lastChild;
         }
-        else if (!(tokensWithSuperscript.includes(token)))
+        if (!(tokensWithSuperscript.includes(token)))
         {
-            if(field.innerHTML.charAt(field.innerHTML.length-1)==="0"&&!isNaN(token)){
-                field.innerHTML=field.innerHTML.slice(0,-1)+token;
+            if(inputTag.innerHTML.charAt(inputTag.innerHTML.length-1)==="0"&&!isNaN(token)){
+                inputTag.innerHTML=inputTag.innerHTML.slice(0,-1)+token;
             }
             else {
-                if(field.innerHTML.charAt(0)==="□"){
-                    field.innerHTML="";
-                }
-                if(field.parentNode===inputField || field.parentNode.nodeName==="sup"){
-                    if(!isNaN(inputStack[inputStack.length-1]) || tokensBeforeBasicOperations.includes(inputStack[inputStack.length-1])){
-                        field.parentNode.innerHTML+=token;
+                if(inputTag.tagName==="SUP"){
+                    if(inputTag.innerHTML.charAt(0)==="□"){
+                        inputTag.innerHTML="";
                     }
-                    else{
-                        field.innerHTML+=token;
+                    if(!inputTag.innerHTML.includes("(")){
+                        if(!basicOperations.includes(token)){
+                            inputTag.innerHTML+=token;
+                        }
+                        else{
+                            if(inputTag!==inputField){
+                                inputTag=inputTag.parentNode;
+                                inputStack.push("]")
+                            }
+                            inputTag.innerHTML+=token;
+                        }
+                    }
+                    else if(inputTag.innerHTML.includes("(")){
+                        if(inputStack[inputStack.length-1]!==")") {
+                            inputTag.innerHTML+=token;
+                        }
+                        else {
+                            if(inputTag!==inputField){
+                                inputTag=inputTag.parentNode;
+                                inputStack.push("]")
+                            }
+                            inputTag.innerHTML+=token;
+
+                        }
                     }
                 }
                 else{
-                    inputField.innerHTML+=token;
+                    if(inputTag!==inputField){
+                        inputTag=inputTag.parentNode;
+                        inputStack.push("]")
+                    }
+                    inputTag.innerHTML+=token;
                 }
             }
         }
         else if((tokensWithSuperscript.includes(token)))
         {
-            let placeholder = document.createTextNode("□"); //□
+            let placeholder = document.createTextNode("□");
             let superscript = document.createElement("SUP");
             superscript.appendChild(placeholder);
-            field.appendChild(superscript);
+            inputTag.appendChild(superscript);
         }
-        console.log(field===inputField);
     }
+
+
+
+
+
+
+
+    /*function checkBracketsForPowerFunction(inputTag){
+        let inputWithBracket=inputTag;
+        if(!inputTag.innerHTML.includes("(") && inputTag!==inputField){
+            checkBracketsForPowerFunction(inputTag.parentNode);
+            inputWithBracket=inputTag.parentNode;
+        }
+        return  inputWithBracket;
+    }*/
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     function removeFromInputStack(option) {
         switch (option) {
@@ -282,9 +334,9 @@
     function addBasicOperation(token) {
         if(!isNaN(inputStack[inputStack.length-1]) || tokensBeforeBasicOperations.includes(inputStack[inputStack.length-1])) {
             addToInputStack(token);
-        }
-        if (token==="^"){
-            inputStack.push("[")
+            if (token==="^"){
+                inputStack.push("[")
+            }
         }
     }
 
@@ -352,6 +404,10 @@
         }
         console.log(inputStack);
     }
+
+
+
+
 
 
 
