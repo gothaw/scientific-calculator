@@ -7,7 +7,7 @@
     const triHypFunctions = document.querySelectorAll(".tri-hyp-function");
 
 
-    const basicOperations = ["+","-","*","/","^","!"];
+    const basicOperations = ["+","-","*","/","!"];
     //tokens not required to be pre multiplied i.e. if entered after a number or )
     const tokensNotPreMultiplied = ["+","-","*","/",")","^","!"];
     //tokens before basic operations, before right bracket, factorial and tokens which are post multiplied
@@ -28,7 +28,7 @@
     function advanceButtonsEvent(index) {
         switch (advanceButtons[index].id) {
             case "x-to-y":
-                addBasicOperation(basicOperations[4]);
+                addOperation(tokensWithSuperscript[0]);
                 break;
             case "x-square":
 
@@ -36,7 +36,7 @@
             case "10-to-x":
                 initialClear();
                 addNumber("10");
-                addBasicOperation(basicOperations[4]);
+                addOperation(basicOperations[4]);
                 break;
             case "tan":
                 initialClear();
@@ -86,7 +86,7 @@
                 addToInputStack("(");
                 break;
             case "n!":
-                addBasicOperation(basicOperations[5]);
+                addOperation(basicOperations[4]);
                 break;
             case "asin":
                 initialClear();
@@ -119,7 +119,7 @@
                 break;
             case "one-over-x":
                 addNumber("1");
-                addBasicOperation(basicOperations[3]);
+                addOperation(basicOperations[3]);
                 break;
             case "pi":
                 initialClear();
@@ -128,7 +128,6 @@
             default:
         }
     }
-
 
     function basicButtonsEvent(index) {
         switch (basicButtons[index].id) {
@@ -142,16 +141,16 @@
                 calculate(inputStack);
                 break;
             case "divide":
-                addBasicOperation(basicOperations[3]);
+                addOperation(basicOperations[3]);
                 break;
             case "times":
-                addBasicOperation(basicOperations[2]);
+                addOperation(basicOperations[2]);
                 break;
             case "minus":
-                addBasicOperation(basicOperations[1]);
+                addOperation(basicOperations[1]);
                 break;
             case "plus":
-                addBasicOperation(basicOperations[0]);
+                addOperation(basicOperations[0]);
                 break;
             case "dot":
                 addDecimalPoint();
@@ -163,8 +162,14 @@
 
     function addToInputStack(token) {
         if(isNaN(token) && !(tokensNotPreMultiplied.includes(token)) && !isNaN(inputStack[inputStack.length - 1])){
-            displayInput(`*${token}`);
-            inputStack.push("*", token);
+            if(inputStack[inputStack.length - 1]==="0") {
+                displayInput(token);
+                inputStack[inputStack.length - 1] = token;
+            }
+            else {
+                displayInput(`*${token}`);
+                inputStack.push("*", token);
+            }
         }
         else if(!(tokensNotPreMultiplied.includes(token)) && tokensBeforeBasicOperations.includes(inputStack[inputStack.length - 1])) {
             displayInput(`*${token}`);
@@ -196,13 +201,23 @@
     }
 
     function displayInput(token) {
+
+        let countInSup=0;
+
         if (inputTag.innerHTML.includes("sup") && inputTag.innerHTML.lastIndexOf("sup")===inputTag.innerHTML.length-4)
         {
             inputTag=inputTag.lastChild;
         }
-        if (!(tokensWithSuperscript.includes(token)))
+        if((tokensWithSuperscript.includes(token)))
         {
-            if(inputTag.innerHTML.charAt(inputTag.innerHTML.length-1)==="0"&&!isNaN(token)){
+            let placeholder = document.createTextNode("□");
+            let superscript = document.createElement("SUP");
+            superscript.appendChild(placeholder);
+            inputTag.appendChild(superscript);
+        }
+        else if (!(tokensWithSuperscript.includes(token)))
+        {
+            if(inputTag.innerHTML.charAt(inputTag.innerHTML.length-1)==="0" && !basicOperations.includes(token)){
                 inputTag.innerHTML=inputTag.innerHTML.slice(0,-1)+token;
             }
             else {
@@ -210,79 +225,30 @@
                     if(inputTag.innerHTML.charAt(0)==="□"){
                         inputTag.innerHTML="";
                     }
-                    if(!inputTag.innerHTML.includes("(")){
-                        if(!basicOperations.includes(token)){
-                            inputTag.innerHTML+=token;
-                        }
-                        else{
-                            if(inputTag!==inputField){
-                                inputTag=inputTag.parentNode;
-                                inputStack.push("]")
-                            }
-                            inputTag.innerHTML+=token;
+                    if(basicOperations.includes(token) || token.charAt(0)==="*") {
+                        while (inputTag.tagName==="SUP" && !inputTag.innerHTML.includes("("))
+                        {
+                            inputTag=inputTag.parentNode;
+                            inputStack.push("]");
                         }
                     }
-                    else if(inputTag.innerHTML.includes("(")){
-                        if(inputStack[inputStack.length-1]!==")") {
-                            inputTag.innerHTML+=token;
+                    for (let char of inputTag.innerHTML){
+                        if(char==="("){
+                            countInSup++;
                         }
-                        else {
-                            if(inputTag!==inputField){
-                                inputTag=inputTag.parentNode;
-                                inputStack.push("]")
-                            }
-                            inputTag.innerHTML+=token;
-
+                        else if(char===")"){
+                            countInSup--;
                         }
                     }
-                }
-                else{
-                    if(inputTag!==inputField){
+                    if(inputStack[inputStack.length-1]===")" && countInSup===0){
                         inputTag=inputTag.parentNode;
-                        inputStack.push("]")
+                        inputStack.push("]");
                     }
-                    inputTag.innerHTML+=token;
                 }
+                inputTag.innerHTML+=token;
             }
         }
-        else if((tokensWithSuperscript.includes(token)))
-        {
-            let placeholder = document.createTextNode("□");
-            let superscript = document.createElement("SUP");
-            superscript.appendChild(placeholder);
-            inputTag.appendChild(superscript);
-        }
     }
-
-
-
-
-
-
-
-    /*function checkBracketsForPowerFunction(inputTag){
-        let inputWithBracket=inputTag;
-        if(!inputTag.innerHTML.includes("(") && inputTag!==inputField){
-            checkBracketsForPowerFunction(inputTag.parentNode);
-            inputWithBracket=inputTag.parentNode;
-        }
-        return  inputWithBracket;
-    }*/
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
     function removeFromInputStack(option) {
         switch (option) {
@@ -331,7 +297,7 @@
        }
     }
 
-    function addBasicOperation(token) {
+    function addOperation(token) {
         if(!isNaN(inputStack[inputStack.length-1]) || tokensBeforeBasicOperations.includes(inputStack[inputStack.length-1])) {
             addToInputStack(token);
             if (token==="^"){
@@ -360,7 +326,7 @@
 
     function addNumber(number) {
         if(!isNaN(inputStack[inputStack.length-1]) && inputStack[0]!=="0"){
-            addBasicOperation(basicOperations[2]);
+            addOperation(basicOperations[2]);
         }
         addToInputStack(number);
     }
