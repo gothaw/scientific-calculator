@@ -6,12 +6,18 @@
     const mainInputField = document.querySelector(".input");
     const triHypFunctions = document.querySelectorAll(".tri-hyp-function");
 
-
+    // tokens for basic operations + factorial symbol
     const basicOperations = ["+","-","*","/","!"];
-    //tokens not required to be pre multiplied i.e. if entered after a number or )
+    // tokens not required to be pre multiplied i.e. if entered after a number or )
     const tokensNotPreMultiplied = ["+","-","*","/",")","^","!"];
-    //tokens before basic operations, before right bracket, factorial and tokens which are post multiplied
-    const tokensBeforeBasicOperations = [")","&pi;","e","!"];
+    // special tokens which:
+    // 1. are required to be at the end of the stack when basicOperations token is entered
+    // 2. are required to be at the end of the stack when ")" is entered
+    // 3. are post multiplied
+    const requiredSpecialToken = [")","&pi;","e","!"];
+    // tokens for functions trigonometric, hyperbolic, logarithms and square root
+    const functionTokens = ["&radic;","tan","tanh","atan","atanh","cos","acos","cosh","acosh","sin","asin","sinh","asinh","log","ln"];
+
 
     let inputStack=[];
     inputStack.push("0");
@@ -173,7 +179,7 @@
                 inputStack.push("*", token);
             }
         }
-        else if(!(tokensNotPreMultiplied.includes(token)) && tokensBeforeBasicOperations.includes(inputStack[inputStack.length - 1])) {
+        else if(!(tokensNotPreMultiplied.includes(token)) && requiredSpecialToken.includes(inputStack[inputStack.length - 1])) {
             displayInput(`*${token}`);
             inputStack.push("*", token);
         }
@@ -206,16 +212,13 @@
 
         let unbalancedLeftBrackets;
 
-        if (inputTag.innerHTML.includes("sup") && inputTag.innerHTML.lastIndexOf("sup")===inputTag.innerHTML.length-4)
-        {
-            inputTag=inputTag.lastChild;
-        }
         if(token==="^")
         {
             let placeholder = document.createTextNode("□");
             let superscript = document.createElement("SUP");
             superscript.appendChild(placeholder);
             inputTag.appendChild(superscript);
+            inputTag=inputTag.lastChild;
         }
         else
         {
@@ -228,12 +231,10 @@
                         inputTag.innerHTML="";
                     }
                     if(basicOperations.includes(token) || token.charAt(0)==="*") {
-                        while (inputTag!==mainInputField && !inputTag.innerHTML.includes("("))
+                        while (inputTag.tagName==="SUP" && !inputTag.innerHTML.includes("("))
                         {
-                            console.log(inputTag);
                             inputTag=inputTag.parentNode;
                             inputStack.push("]");
-                            console.log(inputTag);
                         }
                     }
                     unbalancedLeftBrackets=balancingLeftBrackets(inputTag.innerHTML);
@@ -245,6 +246,7 @@
                 inputTag.innerHTML+=token;
             }
         }
+        console.log(inputTag);
     }
 
     function removeFromInputStack(option) {
@@ -258,9 +260,28 @@
                         inputStack.pop();
                     }
                 }
+                else if(inputStack[inputStack.length-1]==="[" && inputStack[inputStack.length-2]==="^"){
+                    inputTag.innerHTML=inputTag.innerHTML.slice(0,-1);
+                    inputStack.splice(-2);
+                    inputTag=inputTag.parentNode;
+                    console.log(inputTag);
+                    let inputTagChild = inputTag.lastChild;
+                    if(inputTagChild.innerHTML==="")
+                    {
+                        inputTagChild.remove();
+                    }
+                }
                 else{
                     inputTag.innerHTML=inputTag.innerHTML.slice(0,inputTag.innerHTML.lastIndexOf(inputStack[inputStack.length - 1]));
                     inputStack.pop();
+                }
+                while (inputStack[inputStack.length-1]==="]"){
+                    inputTag.innerHTML=inputTag.innerHTML.slice(0,-1);
+                    inputStack.pop();
+                    inputTag=inputTag.lastChild;
+                }
+                if(inputStack[inputStack.length-1]==="["){
+                    inputTag.innerHTML+="□"
                 }
                 if(inputStack.length===0)
                 {
@@ -268,6 +289,7 @@
                     inputStack.push("0");
                 }
                 console.log(inputStack);
+                console.log(inputTag);
                 break;
             case "clear-entry":
                 inputStack=["0"];
@@ -297,7 +319,7 @@
     }
 
     function addOperation(token) {
-        if(!isNaN(inputStack[inputStack.length-1]) || tokensBeforeBasicOperations.includes(inputStack[inputStack.length-1])) {
+        if(!isNaN(inputStack[inputStack.length-1]) || requiredSpecialToken.includes(inputStack[inputStack.length-1])) {
             addToInputStack(token);
             if (token==="^"){
                 inputStack.push("[")
@@ -306,17 +328,17 @@
     }
 
     function addRightBracket(){
-        let unbalancedLeftBrackets = balancingLeftBrackets(inputStack);
+        let unbalancedLeftBrackets = balancingLeftBrackets(inputTag.innerHTML);
         console.log(unbalancedLeftBrackets);
-        if ((!isNaN(inputStack[inputStack.length-1]) || tokensBeforeBasicOperations.includes(inputStack[inputStack.length-1])) && unbalancedLeftBrackets>0)
+        if ((!isNaN(inputStack[inputStack.length-1]) || requiredSpecialToken.includes(inputStack[inputStack.length-1])) && unbalancedLeftBrackets>0)
         {
             addToInputStack(")")
         }
     }
 
-    function balancingLeftBrackets(array){
+    function balancingLeftBrackets(textString){
         let count=0;
-        for(let token of array){
+        for(let token of textString){
             if(token==="("){
                 count++;
             }
@@ -373,12 +395,6 @@
         }
         console.log(inputStack);
     }
-
-
-
-
-
-
 
     function eventHandler() {
         for(let i=0;i<basicButtons.length;i++){
