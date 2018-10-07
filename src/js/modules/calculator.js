@@ -246,7 +246,6 @@
                 inputTag.innerHTML+=token;
             }
         }
-        console.log(inputTag);
     }
 
     function removeFromInputStack(option) {
@@ -264,12 +263,15 @@
                     inputTag.innerHTML=inputTag.innerHTML.slice(0,-1);
                     inputStack.splice(-2);
                     inputTag=inputTag.parentNode;
-                    console.log(inputTag);
                     let inputTagChild = inputTag.lastChild;
                     if(inputTagChild.innerHTML==="")
                     {
                         inputTagChild.remove();
                     }
+                }
+                else if(inputStack[inputStack.length-1]==="(" && functionTokens.includes(inputStack[inputStack.length-2])){
+                    inputTag.innerHTML=inputTag.innerHTML.slice(0,inputTag.innerHTML.lastIndexOf(inputStack[inputStack.length - 2]));
+                    inputStack.splice(-2);
                 }
                 else{
                     inputTag.innerHTML=inputTag.innerHTML.slice(0,inputTag.innerHTML.lastIndexOf(inputStack[inputStack.length - 1]));
@@ -289,7 +291,6 @@
                     inputStack.push("0");
                 }
                 console.log(inputStack);
-                console.log(inputTag);
                 break;
             case "clear-entry":
                 inputStack=["0"];
