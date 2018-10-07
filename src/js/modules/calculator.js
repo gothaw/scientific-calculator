@@ -7,24 +7,26 @@
     const triHypFunctions = document.querySelectorAll(".tri-hyp-function");
 
     // tokens for basic operations + factorial symbol
-    const basicOperations = ["+","-","*","/","!"];
+    const basicOperations = ["+","-","*","/","!","mod"];
     // tokens not required to be pre multiplied i.e. if entered after a number or )
-    const tokensNotPreMultiplied = ["+","-","*","/",")","^","!"];
+    const tokensNotPreMultiplied = ["+","-","*","/",")","^","!","x-root","mod"];
     // special tokens which:
     // 1. are required to be at the end of the stack when basicOperations token is entered
     // 2. are required to be at the end of the stack when ")" is entered
+    // 4. are required to be at the end of the stack when "^" or "x√" is entered
     // 3. are post multiplied
     const requiredSpecialToken = [")","&pi;","e","!"];
-    // tokens for functions trigonometric, hyperbolic, logarithms and square root
-    const functionTokens = ["&radic;","tan","tanh","atan","atanh","cos","acos","cosh","acosh","sin","asin","sinh","asinh","log","ln"];
+    // tokens for functions trigonometric, hyperbolic, logarithms
+    const functionTokens = ["√","tan","tanh","atan","atanh","cos","acos","cosh","acosh","sin","asin","sinh","asinh","log","ln"];
 
-
+    // input stack containing operations and operands showed in the input field
     let inputStack=[];
     inputStack.push("0");
 
-    console.log(inputStack);
-
+    // initiating, which HTML tag is an input tag for user input
     let inputTag=mainInputField;
+
+    console.log(inputStack);
 
     function calculate(stack) {
 
@@ -36,8 +38,7 @@
                 addOperation("^");
                 break;
             case "x-square":
-                addOperation("^");
-                addNumber("2");
+                addOperation("^","2");
                 break;
             case "10-to-x":
                 initialClear();
@@ -60,7 +61,7 @@
                 addToInputStack("(");
                 break;
             case "mod":
-
+                addOperation("mod");
                 break;
             case "sin":
                 initialClear();
@@ -68,11 +69,10 @@
                 addToInputStack("(");
                 break;
             case "x-root":
-
+                addOperation("x-root");
                 break;
             case "x-cube":
-                addOperation("^");
-                addNumber("3");
+                addOperation("^","3");
                 break;
             case "e":
                 initialClear();
@@ -122,7 +122,7 @@
                 break;
             case "sqrt":
                 initialClear();
-                addToInputStack("&radic;");
+                addToInputStack("√");
                 addToInputStack("(");
                 break;
             case "one-over-x":
@@ -219,6 +219,33 @@
             superscript.appendChild(placeholder);
             inputTag.appendChild(superscript);
             inputTag=inputTag.lastChild;
+        }
+        else if(token==="x-root")
+        {
+            if(!isNaN(inputStack[inputStack.length-1]) || inputStack[inputStack.length-1]==="&pi;" || inputStack[inputStack.length-1]==="e"){
+                let degree = document.createTextNode(inputStack[inputStack.length-1]);
+                let superscript = document.createElement("SUP");
+                inputTag.innerHTML=inputTag.innerHTML.slice(0,inputTag.innerHTML.lastIndexOf(inputStack[inputStack.length - 1]));
+                superscript.appendChild(degree);
+                inputTag.appendChild(superscript);
+            }
+            else if(inputStack[inputStack.length-1]==="!")
+            {
+                let numberIndex=1;
+                do {
+                    numberIndex++;
+                }
+                while(!isNaN(inputStack[inputStack.length-numberIndex]) || inputStack[inputStack.length-numberIndex]==="&pi;" || inputStack[inputStack.length-numberIndex]==="e");
+                //error
+                console.log(numberIndex);
+                let degree = document.createTextNode(inputTag.innerHTML.slice(-inputTag.innerHTML.lastIndexOf(inputStack[inputStack.length - numberIndex],-1)));
+                // let superscript = document.createElement("SUP");
+                // superscript.appendChild()
+                console.log(degree);
+
+
+            }
+            inputTag.innerHTML+="&radic;";
         }
         else
         {
@@ -319,14 +346,22 @@
        }
     }
 
-    function addOperation(token) {
+    function addOperation(token, exp="0") {
         if(!isNaN(inputStack[inputStack.length-1]) || requiredSpecialToken.includes(inputStack[inputStack.length-1])) {
             addToInputStack(token);
-            if (token==="^"){
-                inputStack.push("[")
+            if(token==="^"){
+                inputStack.push("[");
+                if(exp!=="0"){
+                    addNumber(exp);
+                }
+            }
+            else if(token==="x-root")
+            {
+                addToInputStack("(");
             }
         }
     }
+
 
     function addRightBracket(){
         let unbalancedLeftBrackets = balancingLeftBrackets(inputTag.innerHTML);
