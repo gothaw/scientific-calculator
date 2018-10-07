@@ -229,21 +229,29 @@
                 superscript.appendChild(degree);
                 inputTag.appendChild(superscript);
             }
-            else if(inputStack[inputStack.length-1]==="!")
+            else
             {
-                let numberIndex=1;
+                let indexNumber=1;
+                let numberOfRightBrackets=0;
+                let superscript = document.createElement("SUP");
+                let degree;
                 do {
-                    numberIndex++;
+                    indexNumber++;
+                    if(inputStack[inputStack.length-indexNumber]===")")
+                    {
+                        numberOfRightBrackets++;
+                    }
                 }
-                while(!isNaN(inputStack[inputStack.length-numberIndex]) || inputStack[inputStack.length-numberIndex]==="&pi;" || inputStack[inputStack.length-numberIndex]==="e");
-                //error
-                console.log(numberIndex);
-                let degree = document.createTextNode(inputTag.innerHTML.slice(-inputTag.innerHTML.lastIndexOf(inputStack[inputStack.length - numberIndex],-1)));
-                // let superscript = document.createElement("SUP");
-                // superscript.appendChild()
-                console.log(degree);
+                while(isNaN(inputStack[inputStack.length-indexNumber]) && inputStack[inputStack.length-indexNumber]!=="&pi;" && inputStack[inputStack.length-indexNumber]!=="e");
+                if(numberOfRightBrackets===0){
+                    degree = document.createTextNode(inputTag.innerHTML.slice(inputTag.innerHTML.lastIndexOf(inputStack[inputStack.length - indexNumber],inputTag.innerHTML.length)));
+                    inputTag.innerHTML=inputTag.innerHTML.slice(0,inputTag.innerHTML.lastIndexOf(inputStack[inputStack.length - indexNumber]));
+                    superscript.appendChild(degree);
+                    inputTag.appendChild(superscript);
+                }
+                else{
 
-
+                }
             }
             inputTag.innerHTML+="&radic;";
         }
