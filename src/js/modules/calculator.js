@@ -3,7 +3,7 @@
     const topRowButtons = document.querySelectorAll(".top-row-btn");
     const advanceButtons = document.querySelectorAll(".advance-btn");
     const mainOutputField = document.querySelector(".output");
-    let mainInputField = document.querySelector(".input");
+    const mainInputField = document.querySelector(".input");
     const triHypFunctions = document.querySelectorAll(".tri-hyp-function");
 
 
@@ -12,7 +12,6 @@
     const tokensNotPreMultiplied = ["+","-","*","/",")","^","!"];
     //tokens before basic operations, before right bracket, factorial and tokens which are post multiplied
     const tokensBeforeBasicOperations = [")","&pi;","e","!"];
-    const tokensWithSuperscript = ["^","x-root"];
 
     let inputStack=[];
     inputStack.push("0");
@@ -28,15 +27,16 @@
     function advanceButtonsEvent(index) {
         switch (advanceButtons[index].id) {
             case "x-to-y":
-                addOperation(tokensWithSuperscript[0]);
+                addOperation("^");
                 break;
             case "x-square":
-
+                addOperation("^");
+                addNumber("2");
                 break;
             case "10-to-x":
                 initialClear();
                 addNumber("10");
-                addOperation(basicOperations[4]);
+                addOperation("^");
                 break;
             case "tan":
                 initialClear();
@@ -54,7 +54,7 @@
                 addToInputStack("(");
                 break;
             case "mod":
-                alert(advanceButtons[index].id);
+
                 break;
             case "sin":
                 initialClear();
@@ -65,10 +65,12 @@
 
                 break;
             case "x-cube":
-
+                addOperation("^");
+                addNumber("3");
                 break;
-            case "e-x":
-
+            case "e":
+                initialClear();
+                addToInputStack("e");
                 break;
             case "atan":
                 initialClear();
@@ -202,20 +204,20 @@
 
     function displayInput(token) {
 
-        let countInSup=0;
+        let unbalancedLeftBrackets;
 
         if (inputTag.innerHTML.includes("sup") && inputTag.innerHTML.lastIndexOf("sup")===inputTag.innerHTML.length-4)
         {
             inputTag=inputTag.lastChild;
         }
-        if((tokensWithSuperscript.includes(token)))
+        if(token==="^")
         {
             let placeholder = document.createTextNode("□");
             let superscript = document.createElement("SUP");
             superscript.appendChild(placeholder);
             inputTag.appendChild(superscript);
         }
-        else if (!(tokensWithSuperscript.includes(token)))
+        else
         {
             if(inputTag.innerHTML.charAt(inputTag.innerHTML.length-1)==="0" && !basicOperations.includes(token)){
                 inputTag.innerHTML=inputTag.innerHTML.slice(0,-1)+token;
@@ -234,15 +236,8 @@
                             console.log(inputTag);
                         }
                     }
-                    for (let char of inputTag.innerHTML){
-                        if(char==="("){
-                            countInSup++;
-                        }
-                        else if(char===")"){
-                            countInSup--;
-                        }
-                    }
-                    if(inputStack[inputStack.length-1]===")" && countInSup===0){
+                    unbalancedLeftBrackets=balancingLeftBrackets(inputTag.innerHTML);
+                    if(inputStack[inputStack.length-1]===")" && unbalancedLeftBrackets===0){
                         inputTag=inputTag.parentNode;
                         inputStack.push("]");
                     }
@@ -277,12 +272,14 @@
             case "clear-entry":
                 inputStack=["0"];
                 mainInputField.innerHTML="0";
+                inputTag=mainInputField;
                 console.log(inputStack);
                 break;
             case "clear":
                 inputStack=["0"];
                 mainInputField.innerHTML="0";
                 mainOutputField.innerHTML="";
+                inputTag=mainInputField;
                 console.log(inputStack);
                 break;
             default:
@@ -309,21 +306,25 @@
     }
 
     function addRightBracket(){
-        let leftBracketsCount=0;
-        let rightBracketsCount=0;
-        for(let token of inputStack){
-            if(token==="("){
-                leftBracketsCount++;
-            }
-            if(token===")"){
-                rightBracketsCount++;
-            }
-        }
-        console.log(leftBracketsCount);
-        if ((!isNaN(inputStack[inputStack.length-1]) || tokensBeforeBasicOperations.includes(inputStack[inputStack.length-1])) && rightBracketsCount<leftBracketsCount)
+        let unbalancedLeftBrackets = balancingLeftBrackets(inputStack);
+        console.log(unbalancedLeftBrackets);
+        if ((!isNaN(inputStack[inputStack.length-1]) || tokensBeforeBasicOperations.includes(inputStack[inputStack.length-1])) && unbalancedLeftBrackets>0)
         {
             addToInputStack(")")
         }
+    }
+
+    function balancingLeftBrackets(array){
+        let count=0;
+        for(let token of array){
+            if(token==="("){
+                count++;
+            }
+            if(token===")"){
+                count--;
+            }
+        }
+        return count;
     }
 
     function addNumber(number) {
