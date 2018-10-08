@@ -1,7 +1,5 @@
 (function () {
-    const basicButtons = document.querySelectorAll(".basic-btn");
-    const topRowButtons = document.querySelectorAll(".top-row-btn");
-    const advanceButtons = document.querySelectorAll(".advance-btn");
+    const buttons = document.querySelectorAll(".btn");
     const mainOutputField = document.querySelector(".output");
     const mainInputField = document.querySelector(".input");
     const triHypFunctions = document.querySelectorAll(".tri-hyp-function");
@@ -32,8 +30,9 @@
 
     }
 
-    function advanceButtonsEvent(index) {
-        switch (advanceButtons[index].id) {
+    function buttonsEvents(index) {
+        switch (buttons[index].id) {
+//=================== Advance Buttons ===================//
             case "x-to-y":
                 addOperation("^");
                 break;
@@ -101,12 +100,7 @@
                 addToInputStack(triHypFunctions[5].innerHTML);
                 addToInputStack("(");
                 break;
-            default:
-        }
-    }
-
-    function topRowButtonsEvent(index) {
-        switch (topRowButtons[index].id) {
+//=================== Top Row Buttons ===================//
             case "backspace":
                 removeFromInputStack("backspace");
                 break;
@@ -133,12 +127,7 @@
                 initialClear();
                 addToInputStack("&pi;");
                 break;
-            default:
-        }
-    }
-
-    function basicButtonsEvent(index) {
-        switch (basicButtons[index].id) {
+//===================== Basic Buttons ===================//
             case "clear-entry":
                 removeFromInputStack("clear-entry");
                 break;
@@ -164,7 +153,7 @@
                 addDecimalPoint();
                 break;
             default:
-                addToInputStack(basicButtons[index].innerHTML);
+                addToInputStack(buttons[index].innerHTML);
         }
     }
 
@@ -269,7 +258,7 @@
         }
         else
         {
-            if(inputTag.innerHTML.charAt(inputTag.innerHTML.length-1)==="0" && !basicOperations.includes(token)){
+            if(inputTag.innerHTML.charAt(inputTag.innerHTML.length-1)==="0" && !basicOperations.includes(token) && token!=="."){
                 inputTag.innerHTML=inputTag.innerHTML.slice(0,-1)+token;
             }
             else {
@@ -453,19 +442,9 @@
     }
 
     function eventHandler() {
-        for(let i=0;i<basicButtons.length;i++){
-            basicButtons[i].addEventListener('click', function () {
-                basicButtonsEvent(i);
-            });
-        }
-        for(let i=0;i<topRowButtons.length;i++){
-            topRowButtons[i].addEventListener('click', function () {
-                topRowButtonsEvent(i);
-            });
-        }
-        for(let i=0;i<advanceButtons.length;i++){
-            advanceButtons[i].addEventListener('click', function () {
-                advanceButtonsEvent(i);
+        for(let i=0;i<buttons.length;i++){
+            buttons[i].addEventListener('click', function () {
+                buttonsEvents(i);
             });
         }
     }
