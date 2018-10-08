@@ -236,13 +236,14 @@
                 let superscript = document.createElement("SUP");
                 let degree;
                 do {
-                    indexNumber++;
                     if(inputStack[inputStack.length-indexNumber]===")")
                     {
                         numberOfRightBrackets++;
                     }
+                    indexNumber++;
                 }
                 while(isNaN(inputStack[inputStack.length-indexNumber]) && inputStack[inputStack.length-indexNumber]!=="&pi;" && inputStack[inputStack.length-indexNumber]!=="e");
+                console.log(numberOfRightBrackets);
                 if(numberOfRightBrackets===0){
                     degree = document.createTextNode(inputTag.innerHTML.slice(inputTag.innerHTML.lastIndexOf(inputStack[inputStack.length - indexNumber],inputTag.innerHTML.length)));
                     inputTag.innerHTML=inputTag.innerHTML.slice(0,inputTag.innerHTML.lastIndexOf(inputStack[inputStack.length - indexNumber]));
@@ -250,7 +251,18 @@
                     inputTag.appendChild(superscript);
                 }
                 else{
-
+                    let numberOfLeftBrackets=0;
+                    let indexLastLeftBracket;
+                    for(let i=1;i<inputTag.innerHTML.length && numberOfLeftBrackets<=numberOfRightBrackets;i++){
+                        if(inputTag.innerHTML.charAt(inputTag.innerHTML.length-i)==="("){
+                            numberOfLeftBrackets++;
+                            indexLastLeftBracket=i;
+                        }
+                    }
+                    degree = document.createTextNode(inputTag.innerHTML.slice(inputTag.innerHTML.length-indexLastLeftBracket,inputTag.innerHTML.length));
+                    inputTag.innerHTML=inputTag.innerHTML.slice(0,inputTag.innerHTML.length-indexLastLeftBracket);
+                    superscript.appendChild(degree);
+                    inputTag.appendChild(superscript);
                 }
             }
             inputTag.innerHTML+="&radic;";
