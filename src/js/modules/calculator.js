@@ -32,7 +32,7 @@
 
     function buttonsEvents(index) {
         switch (buttons[index].id) {
-//=================== Advance Buttons ===================//
+            // Advance Buttons
             case "x-to-y":
                 addOperation("^");
                 break;
@@ -100,7 +100,7 @@
                 addToInputStack(triHypFunctions[5].innerHTML);
                 addToInputStack("(");
                 break;
-//=================== Top Row Buttons ===================//
+            // Top Row Buttons
             case "backspace":
                 removeFromInputStack("backspace");
                 break;
@@ -127,7 +127,7 @@
                 initialClear();
                 addToInputStack("&pi;");
                 break;
-//===================== Basic Buttons ===================//
+            // Basic Buttons
             case "clear-entry":
                 removeFromInputStack("clear-entry");
                 break;
@@ -242,23 +242,25 @@
                 else{
                     let numberOfLeftBrackets=0;
                     let indexLastLeftBracket;
-                    for(let i=1;i<inputTag.innerHTML.length && numberOfLeftBrackets<=numberOfRightBrackets;i++){
+                    for(let i=1;i<inputTag.innerHTML.length && numberOfLeftBrackets<numberOfRightBrackets;i++){
                         if(inputTag.innerHTML.charAt(inputTag.innerHTML.length-i)==="("){
                             numberOfLeftBrackets++;
                             indexLastLeftBracket=i;
                         }
                     }
-                    degree = document.createTextNode(inputTag.innerHTML.slice(inputTag.innerHTML.length-indexLastLeftBracket,inputTag.innerHTML.length));
+                    degree = inputTag.innerHTML.slice(inputTag.innerHTML.length-indexLastLeftBracket,inputTag.innerHTML.length);
                     inputTag.innerHTML=inputTag.innerHTML.slice(0,inputTag.innerHTML.length-indexLastLeftBracket);
-                    superscript.appendChild(degree);
                     inputTag.appendChild(superscript);
+                    inputTag=inputTag.lastChild;
+                    inputTag.innerHTML+=degree;
+                    inputTag=inputTag.parentNode;
                 }
             }
             inputTag.innerHTML+="&radic;";
         }
         else
         {
-            if(inputTag.innerHTML.charAt(inputTag.innerHTML.length-1)==="0" && !basicOperations.includes(token) && token!=="."){
+            if(inputTag.innerHTML.charAt(inputTag.innerHTML.length-1)==="0" && !basicOperations.includes(token) && token!=="." && token!==")"){
                 inputTag.innerHTML=inputTag.innerHTML.slice(0,-1)+token;
             }
             else {
@@ -304,6 +306,13 @@
                     {
                         inputTagChild.remove();
                     }
+                }
+                else if(inputStack[inputStack.length-1]==="x-root"){
+                    inputTag.innerHTML=inputTag.innerHTML.slice(0,-1);
+                    let inputTagChild = inputTag.lastChild;
+                    inputTagChild.remove();
+                    inputTag.innerHTML+=inputTagChild.innerHTML;
+                    inputStack.pop();
                 }
                 else if(inputStack[inputStack.length-1]==="(" && functionTokens.includes(inputStack[inputStack.length-2])){
                     inputTag.innerHTML=inputTag.innerHTML.slice(0,inputTag.innerHTML.lastIndexOf(inputStack[inputStack.length - 2]));
