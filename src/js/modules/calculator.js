@@ -13,7 +13,7 @@
     // 2. are required to be at the end of the stack when ")" is entered
     // 4. are required to be at the end of the stack when "^" or "x√" is entered
     // 3. are post multiplied
-    const requiredSpecialToken = [")","&pi;","e","!"];
+    const requiredSpecialToken = ["]",")","&pi;","e","!"];
     // tokens for functions trigonometric, hyperbolic, logarithms
     const functionTokens = ["√","tan","tanh","atan","atanh","cos","acos","cosh","acosh","sin","asin","sinh","asinh","log","ln"];
 
@@ -211,50 +211,38 @@
         }
         else if(token==="x-root")
         {
-            if(!isNaN(inputStack[inputStack.length-1]) || inputStack[inputStack.length-1]==="&pi;" || inputStack[inputStack.length-1]==="e"){
-                let degree = document.createTextNode(inputStack[inputStack.length-1]);
-                let superscript = document.createElement("SUP");
-                inputTag.innerHTML=inputTag.innerHTML.slice(0,inputTag.innerHTML.lastIndexOf(inputStack[inputStack.length - 1]));
+            let degree;
+            let superscript = document.createElement("SUP");
+            let indexNumber=inputStack.length-1;
+            let numberOfRightBrackets=0;
+            while(indexNumber>=0 && isNaN(inputStack[indexNumber]) && inputStack[indexNumber]!=="&pi;" && inputStack[indexNumber]!=="e"){
+                if(inputStack[indexNumber]===")")
+                {
+                    numberOfRightBrackets++;
+                }
+                indexNumber--;
+            }
+            if(numberOfRightBrackets===0){
+                degree = document.createTextNode(inputTag.innerHTML.slice(inputTag.innerHTML.lastIndexOf(inputStack[inputStack.length - indexNumber],inputTag.innerHTML.length)));
+                inputTag.innerHTML=inputTag.innerHTML.slice(0,inputTag.innerHTML.lastIndexOf(inputStack[inputStack.length - indexNumber]));
                 superscript.appendChild(degree);
                 inputTag.appendChild(superscript);
             }
-            else
-            {
-                let indexNumber=1;
-                let numberOfRightBrackets=0;
-                let superscript = document.createElement("SUP");
-                let degree;
-                do {
-                    if(inputStack[inputStack.length-indexNumber]===")")
-                    {
-                        numberOfRightBrackets++;
+            else{
+                let numberOfLeftBrackets=0;
+                let indexLastLeftBracket=inputTag.innerHTML.length-1;
+                for(let i=1;indexLastLeftBracket>=0 && numberOfLeftBrackets<numberOfRightBrackets;i++){
+                    if(inputTag.innerHTML.charAt(indexLastLeftBracket-i)==="("){
+                        numberOfLeftBrackets++;
+                        indexLastLeftBracket-=i;
                     }
-                    indexNumber++;
                 }
-                while(isNaN(inputStack[inputStack.length-indexNumber]) && inputStack[inputStack.length-indexNumber]!=="&pi;" && inputStack[inputStack.length-indexNumber]!=="e");
-                console.log(numberOfRightBrackets);
-                if(numberOfRightBrackets===0){
-                    degree = document.createTextNode(inputTag.innerHTML.slice(inputTag.innerHTML.lastIndexOf(inputStack[inputStack.length - indexNumber],inputTag.innerHTML.length)));
-                    inputTag.innerHTML=inputTag.innerHTML.slice(0,inputTag.innerHTML.lastIndexOf(inputStack[inputStack.length - indexNumber]));
-                    superscript.appendChild(degree);
-                    inputTag.appendChild(superscript);
-                }
-                else{
-                    let numberOfLeftBrackets=0;
-                    let indexLastLeftBracket;
-                    for(let i=1;i<inputTag.innerHTML.length && numberOfLeftBrackets<numberOfRightBrackets;i++){
-                        if(inputTag.innerHTML.charAt(inputTag.innerHTML.length-i)==="("){
-                            numberOfLeftBrackets++;
-                            indexLastLeftBracket=i;
-                        }
-                    }
-                    degree = inputTag.innerHTML.slice(inputTag.innerHTML.length-indexLastLeftBracket,inputTag.innerHTML.length);
-                    inputTag.innerHTML=inputTag.innerHTML.slice(0,inputTag.innerHTML.length-indexLastLeftBracket);
-                    inputTag.appendChild(superscript);
-                    inputTag=inputTag.lastChild;
-                    inputTag.innerHTML+=degree;
-                    inputTag=inputTag.parentNode;
-                }
+                degree = inputTag.innerHTML.slice(indexLastLeftBracket,inputTag.innerHTML.length);
+                inputTag.innerHTML=inputTag.innerHTML.slice(0,indexLastLeftBracket);
+                inputTag.appendChild(superscript);
+                inputTag=inputTag.lastChild;
+                inputTag.innerHTML+=degree;
+                inputTag=inputTag.parentNode;
             }
             inputTag.innerHTML+="&radic;";
         }
@@ -268,17 +256,14 @@
                     if(inputTag.innerHTML.charAt(0)==="□"){
                         inputTag.innerHTML="";
                     }
+                    unbalancedLeftBrackets=balancingLeftBrackets(inputTag.innerHTML);
                     if(basicOperations.includes(token) || token.charAt(0)==="*") {
-                        while (inputTag.tagName==="SUP" && !inputTag.innerHTML.includes("("))
+                        while (inputTag.tagName==="SUP" && unbalancedLeftBrackets===0)
                         {
                             inputTag=inputTag.parentNode;
                             inputStack.push("]");
+                            unbalancedLeftBrackets=balancingLeftBrackets(inputTag.innerHTML);
                         }
-                    }
-                    unbalancedLeftBrackets=balancingLeftBrackets(inputTag.innerHTML);
-                    if(inputStack[inputStack.length-1]===")" && unbalancedLeftBrackets===0){
-                        inputTag=inputTag.parentNode;
-                        inputStack.push("]");
                     }
                 }
                 inputTag.innerHTML+=token;
@@ -383,10 +368,30 @@
 
     function addRightBracket(){
         let unbalancedLeftBrackets = balancingLeftBrackets(inputTag.innerHTML);
+        let originalInputTag = inputTag;
         console.log(unbalancedLeftBrackets);
-        if ((!isNaN(inputStack[inputStack.length-1]) || requiredSpecialToken.includes(inputStack[inputStack.length-1])) && unbalancedLeftBrackets>0)
+        if ((!isNaN(inputStack[inputStack.length-1]) || requiredSpecialToken.includes(inputStack[inputStack.length-1])))
         {
-            addToInputStack(")")
+            if(unbalancedLeftBrackets>0){
+                addToInputStack(")");
+            }
+            else if(unbalancedLeftBrackets===0){
+                let numberOfSquareBrackets=0;
+                while(inputTag.tagName==="SUP"){
+                    inputTag=inputTag.parentNode;
+                    numberOfSquareBrackets++;
+                    let unbalancedLeftBrackets = balancingLeftBrackets(inputTag.innerHTML);
+                    if(unbalancedLeftBrackets>0){
+                        let squareBracketsArray = Array.from({length:numberOfSquareBrackets},() => ']');
+                        inputStack.push(...squareBracketsArray);
+                        addToInputStack(")");
+                        break
+                    }
+                }
+                if(inputStack[inputStack.length-1]!==")"){
+                    inputTag=originalInputTag;
+                }
+            }
         }
     }
 
