@@ -30,6 +30,11 @@
 
     }
 
+    /**
+     * @name    buttonsEvents
+     * @desc    switch function used to control calculator buttons, default behavior used for numbers 0-9
+     * @param   index {int} button index assigned in eventHandler
+     */
     function buttonsEvents(index) {
         switch (buttons[index].id) {
             // Advance Buttons
@@ -157,6 +162,12 @@
         }
     }
 
+    /**
+     * @name    addToInputStack
+     * @desc    adds a token to input stack and invokes displayInput function, it also adds pre multiplication
+     *          in first two if statements
+     * @param   token to be displayed in inputField
+     */
     function addToInputStack(token) {
         if(isNaN(token) && !(tokensNotPreMultiplied.includes(token)) && !isNaN(inputStack[inputStack.length - 1])){
             if(inputStack[inputStack.length - 1]==="0") {
@@ -173,7 +184,7 @@
             inputStack.push("*", token);
         }
         else if(!isNaN(token) && (!isNaN(inputStack[inputStack.length - 1]))) {
-            if ((token!==0)&&(inputStack[inputStack.length - 1] === "0")){
+            if ((token!=="0")&&(inputStack[inputStack.length - 1] === "0")){
                 displayInput(token);
                 inputStack[inputStack.length - 1] = token;
             }
@@ -190,9 +201,9 @@
     }
 
     /**
-     * @name  displayInput
-     * @desc
-     * @param token {string}
+     * @name    displayInput
+     * @desc    adds a token to the inputField, if a token is exponential or root additional <sup> tag is added
+     * @param   token {string} token to be displayed in inputField
      */
     function displayInput(token) {
 
@@ -220,8 +231,8 @@
                 indexNumber--;
             }
             if(numberOfRightBrackets===0){
-                degree = document.createTextNode(inputTag.innerHTML.slice(inputTag.innerHTML.lastIndexOf(inputStack[inputStack.length - indexNumber],inputTag.innerHTML.length)));
-                inputTag.innerHTML=inputTag.innerHTML.slice(0,inputTag.innerHTML.lastIndexOf(inputStack[inputStack.length - indexNumber]));
+                degree = document.createTextNode(inputTag.innerHTML.slice(inputTag.innerHTML.lastIndexOf(inputStack[indexNumber],inputTag.innerHTML.length)));
+                inputTag.innerHTML=inputTag.innerHTML.slice(0,inputTag.innerHTML.lastIndexOf(inputStack[indexNumber]));
                 superscript.appendChild(degree);
                 inputTag.appendChild(superscript);
             }
@@ -245,7 +256,7 @@
         }
         else
         {
-            if(inputTag.innerHTML.charAt(inputTag.innerHTML.length-1)==="0" && !basicOperations.includes(token) && token!=="." && token!==")"){
+            if(inputTag.innerHTML.charAt(inputTag.innerHTML.length-1)==="0" && !basicOperations.includes(token) && !inputStack[inputStack.length-1].includes(".") && token!=="." && token!==")"){
                 inputTag.innerHTML=inputTag.innerHTML.slice(0,-1)+token;
             }
             else {
@@ -271,7 +282,7 @@
     /**
      * @name    removeFromInputStack
      * @desc    function used to remove tokens from inputStack and update input field
-     * @param   option {string} 'backspace' removed last token, 'clear entry' clears input, 'clear' clears input and output
+     * @param   option {string} 'backspace' removes last token, 'clear entry' clears input, 'clear' clears input and output
      */
     function removeFromInputStack(option) {
         switch (option) {
