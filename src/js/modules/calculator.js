@@ -13,7 +13,7 @@
     // 2. are required to be at the end of the stack when ")" is entered
     // 4. are required to be at the end of the stack when "^" or "x√" is entered
     // 3. are post multiplied
-    const requiredSpecialToken = ["]",")","&pi;","e","!"];
+    const requiredSpecialToken = [")","&pi;","e","!"];
     // tokens for functions trigonometric, hyperbolic, logarithms
     const functionTokens = ["√","tan","tanh","atan","atanh","cos","acos","cosh","acosh","sin","asin","sinh","asinh","log","ln"];
 
@@ -189,14 +189,11 @@
         console.log(inputStack);
     }
 
-    function initialClear(){
-        if(inputStack[0]==="0" && mainInputField.length===1)
-        {
-            inputStack.pop();
-            mainInputField.innerHTML=""
-        }
-    }
-
+    /**
+     * @name  displayInput
+     * @desc
+     * @param token {string}
+     */
     function displayInput(token) {
 
         let unbalancedLeftBrackets;
@@ -271,6 +268,11 @@
         }
     }
 
+    /**
+     * @name    removeFromInputStack
+     * @desc    function used to remove tokens from inputStack and update input field
+     * @param   option {string} 'backspace' removed last token, 'clear entry' clears input, 'clear' clears input and output
+     */
     function removeFromInputStack(option) {
         switch (option) {
             case "backspace":
@@ -287,10 +289,7 @@
                     inputStack.splice(-2);
                     inputTag=inputTag.parentNode;
                     let inputTagChild = inputTag.lastChild;
-                    if(inputTagChild.innerHTML==="")
-                    {
-                        inputTagChild.remove();
-                    }
+                    inputTagChild.remove();
                 }
                 else if(inputStack[inputStack.length-1]==="x-root"){
                     inputTag.innerHTML=inputTag.innerHTML.slice(0,-1);
@@ -339,6 +338,10 @@
         }
     }
 
+    /**
+     * @name    addDecimalPoint
+     * @desc    adds decimal point to a number or adds '0.' to input stack
+     */
     function addDecimalPoint() {
        if(isNaN(inputStack[inputStack.length - 1])) {
            addToInputStack("0.");
@@ -349,6 +352,12 @@
        }
     }
 
+    /**
+     * @name    addOperation
+     * @desc    adds operation if last token in stack is a number or [']',')','&pi;','e','!']
+     * @param   token {string}  operation token
+     * @param   exp {string} exponent of the power function, by default equal to 0
+     */
     function addOperation(token, exp="0") {
         if(!isNaN(inputStack[inputStack.length-1]) || requiredSpecialToken.includes(inputStack[inputStack.length-1])) {
             addToInputStack(token);
@@ -365,11 +374,12 @@
         }
     }
 
-
+    /**
+     * @name    addRightBracket
+     * @desc    adds ')' to inputStack if last token in stack is a number or one of [']',')','&pi;','e','!']
+     */
     function addRightBracket(){
         let unbalancedLeftBrackets = balancingLeftBrackets(inputTag.innerHTML);
-        let originalInputTag = inputTag;
-        console.log(unbalancedLeftBrackets);
         if ((!isNaN(inputStack[inputStack.length-1]) || requiredSpecialToken.includes(inputStack[inputStack.length-1])))
         {
             if(unbalancedLeftBrackets>0){
@@ -377,6 +387,7 @@
             }
             else if(unbalancedLeftBrackets===0){
                 let numberOfSquareBrackets=0;
+                let originalInputTag = inputTag;
                 while(inputTag.tagName==="SUP"){
                     inputTag=inputTag.parentNode;
                     numberOfSquareBrackets++;
@@ -395,6 +406,12 @@
         }
     }
 
+    /**
+     * @name    balancingLeftBrackets
+     * @desc    loops through a string and counts how many unbalanced '(' are in a string
+     * @param   textString {string}
+     * @returns number {int}
+     */
     function balancingLeftBrackets(textString){
         let count=0;
         for(let token of textString){
@@ -408,6 +425,11 @@
         return count;
     }
 
+    /**
+     * @name    addNumber
+     * @desc    function adds a number, used for operations that include numbers i.e. 10^x or 1/x
+     * @param   number {string}
+     */
     function addNumber(number) {
         if(!isNaN(inputStack[inputStack.length-1]) && inputStack[0]!=="0"){
             addOperation(basicOperations[2]);
@@ -415,6 +437,12 @@
         addToInputStack(number);
     }
 
+    /**
+     * @name    plusMinus
+     * @desc    alternates between + and -, if +/- operation stands before the number (last item in the stack),
+     *          if there is a different operation before the number, an additional token (-1*) is introduced/removed before then number
+     *          if last token is operation + or -, the function alternates between the two
+     */
     function plusMinus() {
         if(!isNaN(inputStack[inputStack.length-1]) || inputStack[inputStack.length-1]==="&pi;"){
             let index;
@@ -430,7 +458,7 @@
             }
             else if (inputStack[inputStack.length-1]!=="0"){
                 let lastNumberInStack=inputStack[inputStack.length-1];
-                if(inputStack[inputStack.length-2]==="+/-"){
+                if(inputStack[inputStack.length-2]==="-1*"){
                     index=inputTag.innerHTML.lastIndexOf("-");
                     inputTag.innerHTML=inputTag.innerHTML.slice(0,index)+inputTag.innerHTML.slice(index+1,inputTag.innerHTML.length);
                     inputStack.splice(-2);
@@ -440,7 +468,7 @@
                     index=inputTag.innerHTML.lastIndexOf(lastNumberInStack);
                     inputTag.innerHTML=inputTag.innerHTML.slice(0,index)+"-"+inputTag.innerHTML.slice(index,inputTag.innerHTML.length);
                     inputStack.pop();
-                    inputStack.push("+/-",lastNumberInStack);
+                    inputStack.push("-1*",lastNumberInStack);
                 }
             }
         }
@@ -454,6 +482,19 @@
         }
         console.log(inputStack);
     }
+
+    /**
+     * @name    initialClear
+     * @desc    removes '0' from inputStack and input field, before first token is introduced
+     */
+    function initialClear(){
+        if(inputStack[0]==="0" && mainInputField.length===1)
+        {
+            inputStack.pop();
+            mainInputField.innerHTML=""
+        }
+    }
+
 
     function eventHandler() {
         for(let i=0;i<buttons.length;i++){
