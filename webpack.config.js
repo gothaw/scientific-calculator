@@ -4,7 +4,8 @@ module.exports = {
     entry: {
         'bundle.js': [
             path.resolve(__dirname, 'src/js/index.js'),
-            path.resolve(__dirname, 'src/js/modules/calculator.js')
+            path.resolve(__dirname, 'src/js/modules/input-stack.js'),
+            path.resolve(__dirname, 'src/js/modules/shunting-yard.js')
         ]
     },
     output: {

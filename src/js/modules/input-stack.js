@@ -1,3 +1,13 @@
+// input stack containing operations and operands showed in the input field
+export let inputStack=[];
+// special non numerical tokens which:
+// 1. are required to be at the end of the stack when basicOperations token is entered
+// 2. are required to be at the end of the stack when ")" is entered
+// 4. are required to be at the end of the stack when "^" or "x√" is entered
+// 3. are post multiplied
+// 4. need to at the end of equation when calculate function is invoked
+export const requiredSpecialTokens = [")","&pi;","e","!"];
+
 (function () {
     const buttons = document.querySelectorAll(".btn");
     const mainOutputField = document.querySelector(".output");
@@ -8,27 +18,15 @@
     const basicOperations = ["+","-","*","/","!","mod"];
     // tokens not required to be pre multiplied i.e. if entered after a number or )
     const tokensNotPreMultiplied = ["+","-","*","/",")","^","!","x-root","mod"];
-    // special tokens which:
-    // 1. are required to be at the end of the stack when basicOperations token is entered
-    // 2. are required to be at the end of the stack when ")" is entered
-    // 4. are required to be at the end of the stack when "^" or "x√" is entered
-    // 3. are post multiplied
-    const requiredSpecialToken = [")","&pi;","e","!"];
     // tokens for functions trigonometric, hyperbolic, logarithms
     const functionTokens = ["√","tan","tanh","atan","atanh","cos","acos","cosh","acosh","sin","asin","sinh","asinh","log","ln"];
 
-    // input stack containing operations and operands showed in the input field
-    let inputStack=[];
     inputStack.push("0");
 
     // initiating, which HTML tag is an input tag for user input
     let inputTag=mainInputField;
 
     console.log(inputStack);
-
-    function calculate(stack) {
-
-    }
 
     /**
      * @name    buttonsEvents
@@ -139,9 +137,6 @@
             case "clear":
                 removeFromInputStack("clear");
                 break;
-            case "equals":
-                calculate(inputStack);
-                break;
             case "divide":
                 addOperation(basicOperations[3]);
                 break;
@@ -179,7 +174,7 @@
                 inputStack.push("*", token);
             }
         }
-        else if(!(tokensNotPreMultiplied.includes(token)) && requiredSpecialToken.includes(inputStack[inputStack.length - 1])) {
+        else if(!(tokensNotPreMultiplied.includes(token)) && requiredSpecialTokens.includes(inputStack[inputStack.length - 1])) {
             displayInput(`*${token}`);
             inputStack.push("*", token);
         }
@@ -370,7 +365,7 @@
      * @param   exp {string} exponent of the power function, by default equal to 0
      */
     function addOperation(token, exp="0") {
-        if(!isNaN(inputStack[inputStack.length-1]) || requiredSpecialToken.includes(inputStack[inputStack.length-1])) {
+        if(!isNaN(inputStack[inputStack.length-1]) || requiredSpecialTokens.includes(inputStack[inputStack.length-1])) {
             addToInputStack(token);
             if(token==="^"){
                 inputStack.push("[");
@@ -391,7 +386,7 @@
      */
     function addRightBracket(){
         let unbalancedLeftBrackets = balancingLeftBrackets(inputTag.innerHTML);
-        if ((!isNaN(inputStack[inputStack.length-1]) || requiredSpecialToken.includes(inputStack[inputStack.length-1])))
+        if ((!isNaN(inputStack[inputStack.length-1]) || requiredSpecialTokens.includes(inputStack[inputStack.length-1])))
         {
             if(unbalancedLeftBrackets>0){
                 addToInputStack(")");
