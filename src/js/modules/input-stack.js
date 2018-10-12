@@ -1,3 +1,5 @@
+export const mainOutputField = document.querySelector(".output");
+export const mainInputField = document.querySelector(".input");
 // input stack containing operations and operands showed in the input field
 export let inputStack=[];
 // special non numerical tokens which:
@@ -10,8 +12,7 @@ export const requiredSpecialTokens = [")","&pi;","e","!"];
 
 (function () {
     const buttons = document.querySelectorAll(".btn");
-    const mainOutputField = document.querySelector(".output");
-    const mainInputField = document.querySelector(".input");
+
     const triHypFunctions = document.querySelectorAll(".tri-hyp-function");
 
     // tokens for basic operations + factorial symbol
