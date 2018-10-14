@@ -5,6 +5,7 @@ module.exports = {
         'bundle.js': [
             path.resolve(__dirname, 'src/js/index.js'),
             path.resolve(__dirname, 'src/js/modules/input-stack.js'),
+            path.resolve(__dirname, 'src/js/modules/rpn.js'),
             path.resolve(__dirname, 'src/js/modules/shunting-yard.js')
         ]
     },

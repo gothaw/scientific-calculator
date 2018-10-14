@@ -1,33 +1,29 @@
-export const mainOutputField = document.querySelector(".output");
-export const mainInputField = document.querySelector(".input");
+export const mainOutputField        = document.querySelector(".output");
+export const mainInputField         = document.querySelector(".input");
 // input stack containing operations and operands showed in the input field
-export let inputStack=[];
+export let inputStack               =[];
 // special non numerical tokens which:
 // 1. are required to be at the end of the stack when basicOperations token is entered
 // 2. are required to be at the end of the stack when ")" is entered
 // 4. are required to be at the end of the stack when "^" or "x√" is entered
 // 3. are post multiplied
 // 4. need to at the end of equation when calculate function is invoked
-export const requiredSpecialTokens = [")","&pi;","e","!"];
+export const requiredSpecialTokens  = [")","&pi;","e","!"];
 // tokens for functions trigonometric, hyperbolic, logarithms (excluding x-root)
-export const functionTokens = ["√","tan","tanh","atan","atanh","cos","acos","cosh","acosh","sin","asin","sinh","asinh","log","ln"];
+export const functionTokens         = ["√","tan","tanh","atan","atanh","cos","acos","cosh","acosh","sin","asin","sinh","asinh","log","ln"];
 
 
 (function () {
-    const buttons = document.querySelectorAll(".btn");
-
-    const triHypFunctions = document.querySelectorAll(".tri-hyp-function");
-
+    const buttons                   = document.querySelectorAll(".btn");
+    const triHypFunctions           = document.querySelectorAll(".tri-hyp-function");
     // tokens for basic operations + factorial symbol
-    const basicOperations = ["+","-","*","/","!","mod"];
+    const basicOperations           = ["+","-","*","/","!","mod"];
     // tokens not required to be pre multiplied i.e. if entered after a number or )
-    const tokensNotPreMultiplied = ["+","-","*","/",")","^","!","x-root","mod"];
+    const tokensNotPreMultiplied    = ["+","-","*","/",")","^","!","x-root","mod"];
+    // initiating, which HTML tag is an input tag for user input
+    let inputTag                    = mainInputField;
 
     inputStack.push("0");
-
-    // initiating, which HTML tag is an input tag for user input
-    let inputTag=mainInputField;
-
     console.log(inputStack);
 
     /**

@@ -1,12 +1,12 @@
 (function () {
-    const toggleBtn = document.getElementById("advance-options-toggle");
-    const advanceOptions = document.getElementsByClassName("advance-options")[0];
+    const toggleBtn         = document.getElementById("advance-options-toggle");
+    const advanceOptions    = document.getElementsByClassName("advance-options")[0];
     const triHypFunctionBtn = document.getElementById("tri-hyp");
-    const triHypFunctions = document.getElementsByClassName("tri-hyp-function");
-    const angleOptionBtn = document.getElementById("deg-rad-gra");
+    const triHypFunctions   = document.getElementsByClassName("tri-hyp-function");
+    const angleOptionBtn    = document.getElementById("deg-rad-gra");
 
     //true is second tab of advance options is shown
-    let secondTab   = false;
+    let secondTab           = false;
 
     /**
      * @name    advanceOptions
