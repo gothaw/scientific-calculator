@@ -9,6 +9,9 @@ export let inputStack=[];
 // 3. are post multiplied
 // 4. need to at the end of equation when calculate function is invoked
 export const requiredSpecialTokens = [")","&pi;","e","!"];
+// tokens for functions trigonometric, hyperbolic, logarithms (excluding x-root)
+export const functionTokens = ["√","tan","tanh","atan","atanh","cos","acos","cosh","acosh","sin","asin","sinh","asinh","log","ln"];
+
 
 (function () {
     const buttons = document.querySelectorAll(".btn");
@@ -19,8 +22,6 @@ export const requiredSpecialTokens = [")","&pi;","e","!"];
     const basicOperations = ["+","-","*","/","!","mod"];
     // tokens not required to be pre multiplied i.e. if entered after a number or )
     const tokensNotPreMultiplied = ["+","-","*","/",")","^","!","x-root","mod"];
-    // tokens for functions trigonometric, hyperbolic, logarithms
-    const functionTokens = ["√","tan","tanh","atan","atanh","cos","acos","cosh","acosh","sin","asin","sinh","asinh","log","ln"];
 
     inputStack.push("0");
 
@@ -193,7 +194,7 @@ export const requiredSpecialTokens = [")","&pi;","e","!"];
             displayInput(token);
             inputStack.push(token);
         }
-        console.log(inputStack);
+        //console.log(inputStack);
     }
 
     /**

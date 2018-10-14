@@ -1,4 +1,4 @@
-import {inputStack, requiredSpecialTokens, mainInputField, mainOutputField} from './input-stack'
+import {inputStack, requiredSpecialTokens, mainInputField, mainOutputField, functionTokens} from './input-stack'
 
 import * as math from 'mathjs'
 
@@ -9,118 +9,217 @@ import * as math from 'mathjs'
     let originalStack;
 
 
-    //let inputStack = ["2","+","6","*","-1*","6","+","6","*","(","tan","(","6",")",")","*","6","^","[","2","^","[","2"];
+    let inputStack = ["2","+","6","*","-1*","6","+","6","*","(","tan","(","6",")",")","*","6","^","[","2","^","[","2"];
 
-    let operations = [
+    //let inputStack = ["(","2","+","1",")","*","1"];
+    let counter = 0;
+    console.log(inputStack);
+
+
+    const operationsArray = [
         {
             token: "!",
             numberOfOperands: 1,
-            calculation: (a) => {math.factorial(a)}
+            calculation: (x) => {math.factorial(x)}
         },
         {
             token: "^",
             numberOfOperands: 2,
-            calculation: (a,b) => {Math.pow(a,b)}
+            calculation: (x,y) => {Math.pow(x,y)}
         },
         {
             token: "x-root",
             numberOfOperands: 2,
-            calculation: (a,b) => {Math.pow(b,1/a)}
+            calculation: (x,y) => {Math.pow(y,1/x)}
         },
         {
             token: "√",
             numberOfOperands: 2,
-            calculation: (a) => {Math.sqrt(a)}
+            calculation: (x) => {Math.sqrt(x)}
         },
         {
             token: "tan",
             numberOfOperands: 1,
-            calculation: (a) => {Math.tan(angleInRadians(a))}
+            calculation: (x) => {Math.tan(angleInRadians(x))}
         },
         {
             token: "cos",
             numberOfOperands: 1,
-            calculation: (a) => {Math.cos(angleInRadians(a))}
+            calculation: (x) => {Math.cos(angleInRadians(x))}
         },
         {
             token: "sin",
             numberOfOperands: 1,
-            calculation: (a) => {Math.sin(angleInRadians(a))}
+            calculation: (x) => {Math.sin(angleInRadians(x))}
         },
         {
             token: "atan",
             numberOfOperands: 1,
-            calculation: (a) => {calculateAngle(Math.atan(a))}
+            calculation: (x) => {calculateAngle(Math.atan(x))}
         },
         {
             token: "acos",
             numberOfOperands: 1,
-            calculation: (a) => {calculateAngle(Math.acos(a))}
+            calculation: (x) => {calculateAngle(Math.acos(x))}
         },
         {
             token: "asin",
             numberOfOperands: 1,
-            calculation: (a) => {calculateAngle(Math.asin(a))}
+            calculation: (x) => {calculateAngle(Math.asin(x))}
         },
         {
             token: "tanh",
             numberOfOperands: 1,
-            calculation: (a) => {Math.tanh(a)}
+            calculation: (x) => {Math.tanh(x)}
         },
         {
             token: "cosh",
             numberOfOperands: 1,
-            calculation: (a) => {Math.cosh(a)}
+            calculation: (x) => {Math.cosh(x)}
         },
         {
             token: "sinh",
             numberOfOperands: 1,
-            calculation: (a) => {Math.sinh(a)}
+            calculation: (x) => {Math.sinh(x)}
         },
         {
             token: "atanh",
             numberOfOperands: 1,
-            calculation: (a) => {Math.atanh(a)}
+            calculation: (x) => {Math.atanh(x)}
         },
         {
             token: "acosh",
             numberOfOperands: 1,
-            calculation: (a) => {Math.acosh(a)}
+            calculation: (x) => {Math.acosh(x)}
         },
         {
             token: "asinh",
             numberOfOperands: 1,
-            calculation: (a) => {Math.asinh(a)}
+            calculation: (x) => {Math.asinh(x)}
+        },
+        {
+            token: "ln",
+            numberOfOperands: 1,
+            calculation: (x) => {Math.log(x)}
+        },
+        {
+            token: "log",
+            numberOfOperands: 1,
+            calculation: (x) => {Math.log10(x)}
         },
         {
             token: "mod",
             numberOfOperands: 2,
-            calculation: (a,b) => {return a%b}
+            calculation: (x,y) => {return x%y}
+        },
+        {
+            token: "*",
+            numberOfOperands: 2,
+            calculation: (x,y) => {return x*y}
+        },
+        {
+            token: "/",
+            numberOfOperands: 2,
+            calculation: (x,y) => {return x/y}
+        },
+        {
+            token: "+",
+            numberOfOperands: 2,
+            calculation: (x,y) => {return x+y}
+        },
+        {
+            token: "-",
+            numberOfOperands: 2,
+            calculation: (x,y) => {return x-y}
         }
-
-
     ];
+
+
+    const precedenceArray = [
+        {
+            token: "!",
+            precedence: 5,
+            associativity: "left"
+        },
+        {
+            token: "^",
+            precedence: 4,
+            associativity: "right"
+        },
+        {
+            token: "x-root",
+            precedence: 4,
+            associativity: "left"
+        },
+        {
+            token: "mod",
+            precedence: 3,
+            associativity: "left"
+        },
+        {
+            token: "*",
+            precedence: 2,
+            associativity: "left"
+        },
+        {
+            token: "/",
+            precedence: 2,
+            associativity: "left"
+        },
+        {
+            token: "+",
+            precedence: 1,
+            associativity: "left"
+        },
+        {
+            token: "-",
+            precedence: 1,
+            associativity: "left"
+        }];
 
     function shuntingYard() {
         if(!isNaN(inputStack[inputStack.length-1]) || requiredSpecialTokens.includes(inputStack[inputStack.length-1])){
             let outputStack=[];
             let operatorStack=[];
-            duplicateInputStack();
+            //duplicateInputStack();
             modifyInputStack();
             for(let token of inputStack){
-                if(!isNaN(token) || token==="e" || token==="&pi;"){
+                if(!isNaN(token)){
                     outputStack.push(token);
                 }
-
+                else if(token==="e"){
+                    outputStack.push(Math.exp(1));
+                }
+                else if(token==="&pi;"){
+                    outputStack.push(Math.PI);
+                }
+                else if(functionTokens.includes(token) || token==="(" || token==="["){
+                    operatorStack.push(token)
+                }
+                else if(token===")" || token==="]"){
+                    while(operatorStack.length!==0 && (operatorStack[operatorStack.length-1]!=="(" && operatorStack[operatorStack.length-1]!=="[")){
+                        outputStack.push(operatorStack[operatorStack.length-1]);
+                        operatorStack.pop();
+                    }
+                    operatorStack.pop();
+                }
+                else{
+                    while(operatorStack.length!==0 && functionTokens.includes(operatorStack[operatorStack.length-1]) || tokenHasPrecedence(operatorStack[operatorStack.length-1],token) && (operatorStack[operatorStack.length-1]!=="(" || operatorStack[operatorStack.length-1]!=="[")){
+                        outputStack.push(operatorStack[operatorStack.length-1]);
+                        operatorStack.pop()
+                    }
+                    operatorStack.push(token);
+                }
             }
-
+            while(operatorStack.length!==0){
+                outputStack.push(operatorStack.pop());
+            }
             mainOutputField.innerHTML=mainInputField.innerHTML;
-            console.log({inputStack});
-            console.log({originalStack});
+            //console.log(inputStack);
+            console.log(outputStack);
+            console.log(operatorStack);
         }
     }
-
-
 
     function angleInRadians(angle) {
         if(angleOptionBtn.innerHTML==="deg"){
@@ -141,6 +240,75 @@ import * as math from 'mathjs'
         }
         return angle
     }
+
+
+    function test(token){
+
+        let operatorStack =  ["6", "+", "66", "*", "6", "+", "3"];
+        let outputStack = [];
+
+        while(functionTokens.includes(operatorStack[operatorStack.length-1]) || tokenHasPrecedence(operatorStack[operatorStack.length-1],token)  && (operatorStack[operatorStack.length-1]!=="(" || operatorStack[operatorStack.length-1]!=="[")){
+            outputStack.push(operatorStack[operatorStack.length-1]);
+            operatorStack.pop()
+        }
+        console.log("finished");
+        console.log(outputStack);
+    }
+
+    //test("+");
+
+
+
+  /*  function tokenHasPrecedence(token1, token2) {
+        let hasPrecedence=false;
+        let precedenceOfToken1 = precedenceArray.find(name => name.token === token1).precedence;
+        let precedenceOfToken2 = precedenceArray.find(name => name.token === token2).precedence;
+        let associativityOfToken1 = precedenceArray.find(name => name.token === token1).associativity;
+        if(precedenceOfToken1 > precedenceOfToken2 || (precedenceOfToken1===precedenceOfToken2 && associativityOfToken1==="left")){
+            hasPrecedence = true;
+        }
+        return hasPrecedence;
+    }*/
+
+    function tokenHasPrecedence(token1, token2) {
+        let hasPrecedence=false;
+        let precedenceOfToken1 = precedenceLookUp(token1);
+        let precedenceOfToken2 = precedenceLookUp(token2);
+        let associativityOfToken1 = "right";
+        if(precedenceOfToken1 > precedenceOfToken2 || (precedenceOfToken1===precedenceOfToken2 && associativityOfToken1==="left")){
+            hasPrecedence = true;
+        }
+        return hasPrecedence;
+    }
+
+    function precedenceLookUp(token) {
+        let precedence;
+        switch (token) {
+            case "!":
+                precedence=5;
+                break;
+            case "^":
+                precedence=4;
+                break;
+            case "x-root":
+                precedence=4;
+                break;
+            case "mod":
+                precedence=3;
+                break;
+            case "*":
+                precedence=2;
+                break;
+            case "/":
+                precedence=2;
+                break;
+            default:
+                precedence=1;
+                break;
+        }
+        return precedence;
+    }
+
 
 
 
