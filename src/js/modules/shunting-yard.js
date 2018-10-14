@@ -8,12 +8,9 @@ import * as math from 'mathjs'
 
     let originalStack;
 
-
-    let inputStack = ["2","+","6","*","-1*","6","+","6","*","(","tan","(","6",")",")","*","6","^","[","2","^","[","2"];
+    //let inputStack = ["2","+","6","*","-1*","6","+","6","*","(","tan","(","6",")",")","*","6","^","[","2","^","[","2"];
 
     //let inputStack = ["(","2","+","1",")","*","1"];
-    let counter = 0;
-    console.log(inputStack);
 
 
     const operationsArray = [
@@ -149,7 +146,7 @@ import * as math from 'mathjs'
         {
             token: "x-root",
             precedence: 4,
-            associativity: "left"
+            associativity: "right"
         },
         {
             token: "mod",
@@ -181,7 +178,7 @@ import * as math from 'mathjs'
         if(!isNaN(inputStack[inputStack.length-1]) || requiredSpecialTokens.includes(inputStack[inputStack.length-1])){
             let outputStack=[];
             let operatorStack=[];
-            //duplicateInputStack();
+            duplicateInputStack();
             modifyInputStack();
             for(let token of inputStack){
                 if(!isNaN(token)){
@@ -196,7 +193,7 @@ import * as math from 'mathjs'
                 else if(functionTokens.includes(token) || token==="(" || token==="["){
                     operatorStack.push(token)
                 }
-                else if(token===")" || token==="]"){
+                else if((token===")" || token==="]") && operatorStack.length!==0){
                     while(operatorStack.length!==0 && (operatorStack[operatorStack.length-1]!=="(" && operatorStack[operatorStack.length-1]!=="[")){
                         outputStack.push(operatorStack[operatorStack.length-1]);
                         operatorStack.pop();
@@ -242,74 +239,20 @@ import * as math from 'mathjs'
     }
 
 
-    function test(token){
-
-        let operatorStack =  ["6", "+", "66", "*", "6", "+", "3"];
-        let outputStack = [];
-
-        while(functionTokens.includes(operatorStack[operatorStack.length-1]) || tokenHasPrecedence(operatorStack[operatorStack.length-1],token)  && (operatorStack[operatorStack.length-1]!=="(" || operatorStack[operatorStack.length-1]!=="[")){
-            outputStack.push(operatorStack[operatorStack.length-1]);
-            operatorStack.pop()
-        }
-        console.log("finished");
-        console.log(outputStack);
-    }
-
-    //test("+");
-
-
-
-  /*  function tokenHasPrecedence(token1, token2) {
-        let hasPrecedence=false;
-        let precedenceOfToken1 = precedenceArray.find(name => name.token === token1).precedence;
-        let precedenceOfToken2 = precedenceArray.find(name => name.token === token2).precedence;
-        let associativityOfToken1 = precedenceArray.find(name => name.token === token1).associativity;
-        if(precedenceOfToken1 > precedenceOfToken2 || (precedenceOfToken1===precedenceOfToken2 && associativityOfToken1==="left")){
-            hasPrecedence = true;
-        }
-        return hasPrecedence;
-    }*/
-
     function tokenHasPrecedence(token1, token2) {
         let hasPrecedence=false;
-        let precedenceOfToken1 = precedenceLookUp(token1);
-        let precedenceOfToken2 = precedenceLookUp(token2);
-        let associativityOfToken1 = "right";
-        if(precedenceOfToken1 > precedenceOfToken2 || (precedenceOfToken1===precedenceOfToken2 && associativityOfToken1==="left")){
-            hasPrecedence = true;
+        let indexOfToken1 = precedenceArray.findIndex(name => name.token === token1);
+        let indexOfToken2 = precedenceArray.findIndex(name => name.token === token2);
+        if (indexOfToken1!==-1){
+            let precedenceOfToken1 = precedenceArray[indexOfToken1].precedence;
+            let precedenceOfToken2 = precedenceArray[indexOfToken2].precedence;
+            let associativityOfToken1 = precedenceArray[indexOfToken1].associativity;
+            if(precedenceOfToken1 > precedenceOfToken2 || (precedenceOfToken1===precedenceOfToken2 && associativityOfToken1==="left")){
+                hasPrecedence = true;
+            }
         }
         return hasPrecedence;
     }
-
-    function precedenceLookUp(token) {
-        let precedence;
-        switch (token) {
-            case "!":
-                precedence=5;
-                break;
-            case "^":
-                precedence=4;
-                break;
-            case "x-root":
-                precedence=4;
-                break;
-            case "mod":
-                precedence=3;
-                break;
-            case "*":
-                precedence=2;
-                break;
-            case "/":
-                precedence=2;
-                break;
-            default:
-                precedence=1;
-                break;
-        }
-        return precedence;
-    }
-
-
 
 
     function modifyInputStack() {
