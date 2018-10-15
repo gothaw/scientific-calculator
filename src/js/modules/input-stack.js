@@ -1,11 +1,12 @@
 //IMPORTS
 import {output} from "./rpn";
+import {originalStack} from "./calculate";
 //EXPORTS
 export const mainOutputField        = document.querySelector(".output");
 export const mainInputField         = document.querySelector(".input");
-// inputTag - initiating, which HTML tag is an input tag for user input
+// inputTag - initiating, which HTML tag is an input tag for user input.
 export let inputTag                 = mainInputField;
-// inputStack - input stack containing operations and operands showed in the input field
+// inputStack - input stack containing operations and operands showed in the input field.
 export let inputStack=[];
 // requiredSpecialTokens - special non numerical tokens which:
 // 1. are required to be at the end of the stack when basicOperations token is entered
@@ -14,35 +15,68 @@ export let inputStack=[];
 // 3. are post multiplied
 // 4. need to at the end of equation when calculate function is invoked
 export const requiredSpecialTokens  = [")","&pi;","e","!"];
-// functionTokens - tokens for functions trigonometric, hyperbolic, logarithms (excluding x-root)
+// functionTokens - tokens for functions trigonometric, hyperbolic, logarithms (excluding x-root).
 export const functionTokens         = ["√","tan","tanh","atan","atanh","cos","acos","cosh","acosh","sin","asin","sinh","asinh","log","ln"];
 /**
  * @name        updateInputStack
- * @desc        sets the inputStack to empty array and pushes "0" if no calculations have been carried out before,
- *              if user carried out calculations the function pushes output as a first element
+ * @desc        Sets the inputStack to an empty array. If no calculations have been carried out before, it and pushes "0" to the stack.
+ *              "0" is also pushed if calculations gave result of NaN or Infinity.
+ *              If user carried out calculations and result is a finite number the function pushes output as the first element.
+ *              If an error is thrown in calculate.js, unmodified originalStack is assigned to inputStack.
+ * @param       error {boolean} with default value of false.
  */
-export function updateInputStack() {
-    inputStack=[];
-    (output===undefined || output===Infinity)? inputStack.push("0"):inputStack.push(output.toString())
+export function updateInputStack(error=false) {
+    if(error){
+        inputStack=originalStack;
+    }
+    else{
+        inputStack=[];
+        (output===undefined || output===Infinity || isNaN(output))? inputStack.push("0"):inputStack.push(output.toString())
+    }
 }
+/**
+ * @name        resetInputTag
+ * @desc        Sets the inputTag to mainInputField.
+ */
 export function resetInputTag() {
     inputTag = mainInputField;
 }
-
+/**
+ * @name        balancingLeftBrackets
+ * @desc        Loops through a string or an array and counts how many unbalanced '(' are in it.
+ * @param       textString {string, array}
+ * @returns     number {int} of unbalanced left brackets.
+ */
+export function balancingLeftBrackets(textString){
+    let count=0;
+    for(let token of textString){
+        if(token==="("){
+            count++;
+        }
+        if(token===")"){
+            count--;
+        }
+    }
+    return count;
+}
+/**
+ END OF EXPORTS AND IMPORTS
+ **/
 (function () {
     const buttons                   = document.querySelectorAll(".btn");
     const triHypFunctions           = document.querySelectorAll(".tri-hyp-function");
-    // basicOperations - tokens for basic operations + factorial symbol
+    // basicOperations - tokens for basic operations + factorial symbol.
     const basicOperations           = ["+","-","*","/","!","mod"];
-    // tokensNotPreMultiplied - tokens not required to be pre multiplied i.e. if entered after a number or )
+    // tokensNotPreMultiplied - tokens not required to be pre multiplied i.e. if entered after a number or ')'.
     const tokensNotPreMultiplied    = ["+","-","*","/",")","^","!","x-root","mod"];
 
     //console.log(inputStack);
 
     /**
      * @name    buttonsEvents
-     * @desc    switch function used to control calculator buttons, default behavior used for numbers 0-9
-     * @param   index {int} button index assigned in eventHandler
+     * @desc    Switch function used to control calculator buttons.
+     *          Each case refers to one button and default behavior used for numbers 0-9.
+     * @param   index {int} button index assigned in eventHandler.
      */
     function buttonsEvents(index) {
         switch (buttons[index].id) {
@@ -170,9 +204,9 @@ export function resetInputTag() {
 
     /**
      * @name    addToInputStack
-     * @desc    adds a token to input stack and invokes displayInput function, it also adds pre multiplication
-     *          in first two if statements
-     * @param   token to be displayed in inputField
+     * @desc    Adds a token to input stack and invokes displayInput function.
+     *          The function also adds pre multiplication in first two if statements for certain tokens.
+     * @param   token to be added to inputStack.
      */
     function addToInputStack(token) {
         if(isNaN(token) && !(tokensNotPreMultiplied.includes(token)) && !isNaN(inputStack[inputStack.length - 1])){
@@ -208,8 +242,12 @@ export function resetInputTag() {
 
     /**
      * @name    displayInput
-     * @desc    adds a token to the inputField, if a token is exponential or root additional <sup> tag is added
-     * @param   token {string} token to be displayed in inputField
+     * @desc    Function invoked in addToInputStack function. It adds a token to the inputField.
+     *          If a token is exponential or x-root an additional <sup> tag is added to HTML. These <sup> tags are children of mainInputField.
+     *          The function switches between <sup> tags and mainInputField DOM element depending on tokens added to the inputStack.
+     *          This is carried out by assigning different values of DOM elements to inputTag.
+     *          The function also adds ']' to inputStack after exiting <sup> tag, these tokens are used to wrap exponent of '^' operator.
+     * @param   token {string} token to be displayed in inputTag.
      */
     function displayInput(token) {
 
@@ -287,8 +325,11 @@ export function resetInputTag() {
 
     /**
      * @name    removeFromInputStack
-     * @desc    function used to remove tokens from inputStack and update input field
-     * @param   option {string} 'backspace' removes last token, 'clear entry' clears input, 'clear' clears input and output
+     * @desc    Function used to remove tokens from inputStack and update inner HTML of an inputTag.
+     *          The function has three options - 'backspace' removes last token, 'clear entry' clears input, 'clear' clears input and output.
+     *          The 'backspace' option removes <sup> tags if certain tokens in the stack are removed.
+     *          It also switches between <sup> tags and mainInputField DOM element.
+     * @param   option {string}
      */
     function removeFromInputStack(option) {
         switch (option) {
@@ -357,7 +398,7 @@ export function resetInputTag() {
 
     /**
      * @name    addDecimalPoint
-     * @desc    adds decimal point to a number or adds '0.' to input stack
+     * @desc    Adds decimal point to a number or adds '0.' to input stack.
      */
     function addDecimalPoint() {
        if(isNaN(inputStack[inputStack.length - 1])) {
@@ -371,9 +412,11 @@ export function resetInputTag() {
 
     /**
      * @name    addOperation
-     * @desc    adds operation if last token in stack is a number or [']',')','&pi;','e','!']
-     * @param   token {string}  operation token
-     * @param   exp {string} exponent of the power function, by default equal to 0
+     * @desc    Adds operation if last token in stack is a number or [')','&pi;','e','!'].
+     *          For exponential function, it adds '[', which are not displayed in the inputTag.
+     *          The purpose of this token is to wrap the power function.
+     * @param   token {string} operation token.
+     * @param   exp {string} exponent of the '^' operator, by default equal to '0'.
      */
     function addOperation(token, exp="0") {
         if(!isNaN(inputStack[inputStack.length-1]) || requiredSpecialTokens.includes(inputStack[inputStack.length-1])) {
@@ -393,7 +436,10 @@ export function resetInputTag() {
 
     /**
      * @name    addRightBracket
-     * @desc    adds ')' to inputStack if last token in stack is a number or one of [']',')','&pi;','e','!']
+     * @desc    Adds ')' to inputStack if last token in stack is a number or one of [')','&pi;','e','!'].
+     *          The function calls balancingLeftBracketFunction to find if there are unbalanced '(' in the inputTag.
+     *          It also switches between parents of current inputTag to find a DOM element with unbalanced '('.
+     *          If no unbalanced left brackets are found, ')' is not added.
      */
     function addRightBracket(){
         let unbalancedLeftBrackets = balancingLeftBrackets(inputTag.innerHTML);
@@ -424,27 +470,9 @@ export function resetInputTag() {
     }
 
     /**
-     * @name    balancingLeftBrackets
-     * @desc    loops through a string and counts how many unbalanced '(' are in a string
-     * @param   textString {string}
-     * @returns number {int}
-     */
-    function balancingLeftBrackets(textString){
-        let count=0;
-        for(let token of textString){
-            if(token==="("){
-                count++;
-            }
-            if(token===")"){
-                count--;
-            }
-        }
-        return count;
-    }
-
-    /**
      * @name    addNumber
-     * @desc    function adds a number, used for operations that include numbers i.e. 10^x or 1/x
+     * @desc    Function which adds a number. It is used for operations that include numbers i.e. 10^x or 1/x.
+     *          It allows the number to be pre multiplied if entered after another number.
      * @param   number {string}
      */
     function addNumber(number) {
@@ -456,9 +484,10 @@ export function resetInputTag() {
 
     /**
      * @name    plusMinus
-     * @desc    alternates between + and -, if +/- operation stands before the number (last item in the stack),
-     *          if there is a different operation before the number, an additional token (-1*) is introduced/removed before then number
-     *          if last token is operation + or -, the function alternates between the two
+     * @desc    Alternates between + and -, if +/- operation stands before the number (last item in the stack).
+     *          If there is a different operation before the number, an additional token (-1*) is introduced/removed before then number.
+     *          This token is later on, changed to '-1' and '*' when calculate button is clicked.
+     *          If last token is operation + or -, the function alternates between the two.
      */
     function plusMinus() {
         if(!isNaN(inputStack[inputStack.length-1]) || inputStack[inputStack.length-1]==="&pi;"){
@@ -497,12 +526,12 @@ export function resetInputTag() {
             inputStack[inputStack.length-1]="+";
             inputTag.innerHTML=inputTag.innerHTML.slice(0,-1)+"+";
         }
-        console.log(inputStack);
+        //console.log(inputStack);
     }
 
     /**
      * @name    initialClear
-     * @desc    removes '0' from inputStack and input field, before first token is introduced
+     * @desc    Removes '0' from inputStack and input field when first token is introduced.
      */
     function initialClear(){
         if(inputStack[0]==="0" && mainInputField.length===1)

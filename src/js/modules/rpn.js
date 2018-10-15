@@ -2,12 +2,23 @@
 import {postfixStack} from "./shunting-yard";
 import * as math from "mathjs";
 //EXPORTS
+//output - primitive used to store the final value of calculation
 export let output;
+//outputStack - stack used to store value of calculations carried out in postfix evaluation
 export let outputStack=[];
+/**
+ * @name        resetOutputStack
+ * @desc        Resets the outputStack to an empty array.
+ */
 export function resetOutputStack() {
     outputStack=[];
 }
 
+/**
+ * @name        reversePolishNotation
+ * @desc        Functions carries out Reverse Polish Notation evaluation on a postfix stack obtained from shunting yard algorithm.
+ *              Algorithm description: https://en.wikipedia.org/wiki/Reverse_Polish_notation#Postfix_evaluation_algorithm
+ */
 export function reversePolishNotation() {
     for (let token of postfixStack){
         if(!isNaN(token)){
@@ -28,13 +39,14 @@ export function reversePolishNotation() {
         }
     }
     output=+outputStack[0].toFixed(14);
-    console.log(outputStack)
+    console.log("Output Stack:",outputStack);
 }
-
-
-
+/**
+ END OF EXPORTS AND IMPORTS
+ **/
 const angleOptionBtn    = document.getElementById("deg-rad-gra");
-
+//operationsArray - an array with object literals for each operation and function.
+//For each object it defines a token, numberOfOperands and calculation function.
 const operationsArray = [
     {
         token: "!",
@@ -153,6 +165,13 @@ const operationsArray = [
     }
 ];
 
+/**
+ * @name        angleInRadians
+ * @desc        Changes angle given in degrees/radians/grads to radians. Used in trigonometric functions.
+ *              The option depends on the inner HTML of angleOptionBtn DOM element.
+ * @param       angle in radians/degrees/grads
+ * @returns     angle in radians
+ */
 function angleInRadians(angle) {
     if(angleOptionBtn.innerHTML==="deg"){
         angle*=Math.PI/180;
@@ -163,6 +182,13 @@ function angleInRadians(angle) {
     return angle
 }
 
+/**
+ * @name        calculateAngle
+ * @desc        Changes angle in radians calculated by inverse trigonometric functions to degrees/grads or radians.
+ *              The option depends on the inner HTML of angleOptionBtn DOM element.
+ * @param       angle in radians
+ * @returns     angle in radians/degrees/grads
+ */
 function calculateAngle(angle){
     if(angleOptionBtn.innerHTML==="deg"){
         angle*=180/Math.PI;
