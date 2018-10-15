@@ -1,105 +1,109 @@
-import {inputStack, mainInputField, mainOutputField} from './input-stack';
+import {inputStack as infixStack, mainInputField, mainOutputField} from './input-stack';
 import {shuntingYard} from "./shunting-yard";
 import * as math from "mathjs";
-import {outputStack as shuntingYardStack} from "./shunting-yard";
+import {postfixStack} from "./shunting-yard";
+import {updateInputStack} from "./input-stack";
+import {resetPostFixStack} from "./shunting-yard";
+
+export let output;
 
 (function () {
     const calculateButton   = document.querySelector("#equals");
     const angleOptionBtn    = document.getElementById("deg-rad-gra");
 
     let originalStack;
-    let outputStack;
+    let outputStack=[];
 
     const operationsArray = [
         {
             token: "!",
             numberOfOperands: 1,
-            calculation: (x) => {math.factorial(x)}
+            calculation: (x) => {return math.factorial(x)}
         },
         {
             token: "^",
             numberOfOperands: 2,
-            calculation: (x,y) => {Math.pow(x,y)}
+            calculation: (x,y) => {return Math.pow(x,y)}
         },
         {
             token: "x-root",
             numberOfOperands: 2,
-            calculation: (x,y) => {Math.pow(y,1/x)}
+            calculation: (x,y) => {return Math.pow(y,1/x)}
         },
         {
             token: "√",
-            numberOfOperands: 2,
-            calculation: (x) => {Math.sqrt(x)}
+            numberOfOperands: 1,
+            calculation: (x) => {return Math.sqrt(x)}
         },
         {
             token: "tan",
             numberOfOperands: 1,
-            calculation: (x) => {Math.tan(angleInRadians(x))}
+            calculation: (x) => {return Math.tan(angleInRadians(x))}
         },
         {
             token: "cos",
             numberOfOperands: 1,
-            calculation: (x) => {Math.cos(angleInRadians(x))}
+            calculation: (x) => {return Math.cos(angleInRadians(x))}
         },
         {
             token: "sin",
             numberOfOperands: 1,
-            calculation: (x) => {Math.sin(angleInRadians(x))}
+            calculation: (x) => {return Math.sin(angleInRadians(x))}
         },
         {
             token: "atan",
             numberOfOperands: 1,
-            calculation: (x) => {calculateAngle(Math.atan(x))}
+            calculation: (x) => {return calculateAngle(Math.atan(x))}
         },
         {
             token: "acos",
             numberOfOperands: 1,
-            calculation: (x) => {calculateAngle(Math.acos(x))}
+            calculation: (x) => {return calculateAngle(Math.acos(x))}
         },
         {
             token: "asin",
             numberOfOperands: 1,
-            calculation: (x) => {calculateAngle(Math.asin(x))}
+            calculation: (x) => {return calculateAngle(Math.asin(x))}
         },
         {
             token: "tanh",
             numberOfOperands: 1,
-            calculation: (x) => {Math.tanh(x)}
+            calculation: (x) => {return Math.tanh(x)}
         },
         {
             token: "cosh",
             numberOfOperands: 1,
-            calculation: (x) => {Math.cosh(x)}
+            calculation: (x) => {return Math.cosh(x)}
         },
         {
             token: "sinh",
             numberOfOperands: 1,
-            calculation: (x) => {Math.sinh(x)}
+            calculation: (x) => {return Math.sinh(x)}
         },
         {
             token: "atanh",
             numberOfOperands: 1,
-            calculation: (x) => {Math.atanh(x)}
+            calculation: (x) => {return Math.atanh(x)}
         },
         {
             token: "acosh",
             numberOfOperands: 1,
-            calculation: (x) => {Math.acosh(x)}
+            calculation: (x) => {return Math.acosh(x)}
         },
         {
             token: "asinh",
             numberOfOperands: 1,
-            calculation: (x) => {Math.asinh(x)}
+            calculation: (x) => {return Math.asinh(x)}
         },
         {
             token: "ln",
             numberOfOperands: 1,
-            calculation: (x) => {Math.log(x)}
+            calculation: (x) => {return Math.log(x)}
         },
         {
             token: "log",
             numberOfOperands: 1,
-            calculation: (x) => {Math.log10(x)}
+            calculation: (x) => {return Math.log10(x)}
         },
         {
             token: "mod",
@@ -128,17 +132,37 @@ import {outputStack as shuntingYardStack} from "./shunting-yard";
         }
     ];
 
+
     function reversePolishNotation() {
-        /*try {
-
+        for (let token of postfixStack){
+            if(!isNaN(token)){
+                outputStack.push(JSON.parse(token));
+            }
+            else {
+                let tokenIndex = operationsArray.findIndex(name => name.token === token);
+                let numberOfOperands = operationsArray[tokenIndex].numberOfOperands;
+                if(numberOfOperands===1){
+                    let operand = outputStack.pop();
+                    outputStack.push(operationsArray[tokenIndex].calculation(operand));
+                }
+                else if(numberOfOperands===2){
+                    let operand1 = outputStack.pop();
+                    let operand2 = outputStack.pop();
+                    outputStack.push(operationsArray[tokenIndex].calculation(operand2,operand1));
+                }
+            }
         }
-        catch (e) {
-
-        }*/
-        mainOutputField.innerHTML=mainInputField.innerHTML;
-        console.log("hello world")
+        output=+outputStack[0].toFixed(14);
+        console.log(outputStack)
     }
 
+    function displayOutput() {
+        mainOutputField.innerHTML=`${mainInputField.innerHTML} = ${output}`;
+        mainInputField.innerHTML=output.toString();
+        updateInputStack();
+        resetPostFixStack();
+        outputStack=[];
+    }
 
     function angleInRadians(angle) {
         if(angleOptionBtn.innerHTML==="deg"){
@@ -160,12 +184,12 @@ import {outputStack as shuntingYardStack} from "./shunting-yard";
         return angle
     }
 
-    function modifyInputStack() {
+    function modifyInfixStack() {
         let unbalancedSquareBrackets=0;
-        for(let token of inputStack){
+        for(let token of infixStack){
             if(token==="-1*"){
-                let index = inputStack.indexOf(token);
-                inputStack.splice(index,1,"-1","*");
+                let index = infixStack.indexOf(token);
+                infixStack.splice(index,1,"-1","*");
             }
             else if(token==="["){
                 unbalancedSquareBrackets++;
@@ -175,22 +199,23 @@ import {outputStack as shuntingYardStack} from "./shunting-yard";
             }
         }
         for(let i=0;i<unbalancedSquareBrackets;i++){
-            inputStack.push("]")
+            infixStack.push("]")
         }
-        console.log(inputStack);
+        console.log(infixStack);
     }
 
-    function duplicateInputStack() {
-        originalStack = inputStack.slice();
+    function duplicateInfixStack() {
+        originalStack = infixStack.slice();
         console.log("This is original",originalStack);
     }
 
     function eventHandler() {
         calculateButton.addEventListener("click", () => {
-            duplicateInputStack();
-            modifyInputStack();
+            duplicateInfixStack();
+            modifyInfixStack();
             shuntingYard();
             reversePolishNotation();
+            displayOutput();
         })
     }
 

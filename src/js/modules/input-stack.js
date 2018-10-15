@@ -1,7 +1,9 @@
+import {output} from "./rpn";
+
 export const mainOutputField        = document.querySelector(".output");
 export const mainInputField         = document.querySelector(".input");
 // input stack containing operations and operands showed in the input field
-export let inputStack               =[];
+export let inputStack;
 // special non numerical tokens which:
 // 1. are required to be at the end of the stack when basicOperations token is entered
 // 2. are required to be at the end of the stack when ")" is entered
@@ -12,9 +14,10 @@ export const requiredSpecialTokens  = [")","&pi;","e","!"];
 // tokens for functions trigonometric, hyperbolic, logarithms (excluding x-root)
 export const functionTokens         = ["√","tan","tanh","atan","atanh","cos","acos","cosh","acosh","sin","asin","sinh","asinh","log","ln"];
 
-//export let inputStack = ["2","+","6","*","-1*","6","+","6","*","(","tan","(","6",")",")","*","6","^","[","2","^","[","2"];
-//export let inputStack = ["(","2","+","1",")","*","1"];
-
+export function updateInputStack() {
+    inputStack=[];
+    (output===undefined)? inputStack.push("0"):inputStack.push(output.toString())
+}
 
 (function () {
     const buttons                   = document.querySelectorAll(".btn");
@@ -26,7 +29,6 @@ export const functionTokens         = ["√","tan","tanh","atan","atanh","cos","
     // initiating, which HTML tag is an input tag for user input
     let inputTag                    = mainInputField;
 
-    inputStack.push("0");
     //console.log(inputStack);
 
     /**
@@ -512,6 +514,7 @@ export const functionTokens         = ["√","tan","tanh","atan","atanh","cos","
     }
 
     function init() {
+        updateInputStack();
         eventHandler();
     }
 
