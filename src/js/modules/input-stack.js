@@ -12,6 +12,9 @@ export const requiredSpecialTokens  = [")","&pi;","e","!"];
 // tokens for functions trigonometric, hyperbolic, logarithms (excluding x-root)
 export const functionTokens         = ["√","tan","tanh","atan","atanh","cos","acos","cosh","acosh","sin","asin","sinh","asinh","log","ln"];
 
+//export let inputStack = ["2","+","6","*","-1*","6","+","6","*","(","tan","(","6",")",")","*","6","^","[","2","^","[","2"];
+//export let inputStack = ["(","2","+","1",")","*","1"];
+
 
 (function () {
     const buttons                   = document.querySelectorAll(".btn");
@@ -24,7 +27,7 @@ export const functionTokens         = ["√","tan","tanh","atan","atanh","cos","
     let inputTag                    = mainInputField;
 
     inputStack.push("0");
-    console.log(inputStack);
+    //console.log(inputStack);
 
     /**
      * @name    buttonsEvents
@@ -323,20 +326,20 @@ export const functionTokens         = ["√","tan","tanh","atan","atanh","cos","
                     inputTag.innerHTML="0";
                     inputStack.push("0");
                 }
-                console.log(inputStack);
+                //console.log(inputStack);
                 break;
             case "clear-entry":
                 inputStack=["0"];
                 mainInputField.innerHTML="0";
                 inputTag=mainInputField;
-                console.log(inputStack);
+                //console.log(inputStack);
                 break;
             case "clear":
                 inputStack=["0"];
                 mainInputField.innerHTML="0";
                 mainOutputField.innerHTML="";
                 inputTag=mainInputField;
-                console.log(inputStack);
+                //console.log(inputStack);
                 break;
             default:
         }

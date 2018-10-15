@@ -1,15 +1,14 @@
 import {inputStack, mainInputField, mainOutputField} from './input-stack';
 import {shuntingYard} from "./shunting-yard";
 import * as math from "mathjs";
+import {outputStack as shuntingYardStack} from "./shunting-yard";
 
 (function () {
     const calculateButton   = document.querySelector("#equals");
     const angleOptionBtn    = document.getElementById("deg-rad-gra");
 
-    //let inputStack = ["2","+","6","*","-1*","6","+","6","*","(","tan","(","6",")",")","*","6","^","[","2","^","[","2"];
-
-    //let inputStack = ["(","2","+","1",")","*","1"];
     let originalStack;
+    let outputStack;
 
     const operationsArray = [
         {
@@ -130,6 +129,12 @@ import * as math from "mathjs";
     ];
 
     function reversePolishNotation() {
+        /*try {
+
+        }
+        catch (e) {
+
+        }*/
         mainOutputField.innerHTML=mainInputField.innerHTML;
         console.log("hello world")
     }
@@ -172,13 +177,13 @@ import * as math from "mathjs";
         for(let i=0;i<unbalancedSquareBrackets;i++){
             inputStack.push("]")
         }
+        console.log(inputStack);
     }
 
     function duplicateInputStack() {
         originalStack = inputStack.slice();
+        console.log("This is original",originalStack);
     }
-
-
 
     function eventHandler() {
         calculateButton.addEventListener("click", () => {

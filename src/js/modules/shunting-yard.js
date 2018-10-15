@@ -1,5 +1,46 @@
 import {inputStack, requiredSpecialTokens, functionTokens} from './input-stack';
 
+export let outputStack=[];
+
+export function shuntingYard() {
+    if(!isNaN(inputStack[inputStack.length-1]) || inputStack[inputStack.length-1]==="]" || requiredSpecialTokens.includes(inputStack[inputStack.length-1])){
+        let operatorStack=[];
+        for(let token of inputStack){
+            if(!isNaN(token)){
+                outputStack.push(token);
+            }
+            else if(token==="e"){
+                outputStack.push(Math.exp(1));
+            }
+            else if(token==="&pi;"){
+                outputStack.push(Math.PI);
+            }
+            else if(functionTokens.includes(token) || token==="(" || token==="["){
+                operatorStack.push(token)
+            }
+            else if((token===")" || token==="]") && operatorStack.length!==0){
+                while(operatorStack.length!==0 && (operatorStack[operatorStack.length-1]!=="(" && operatorStack[operatorStack.length-1]!=="[")){
+                    outputStack.push(operatorStack[operatorStack.length-1]);
+                    operatorStack.pop();
+                }
+                operatorStack.pop();
+            }
+            else{
+                while(operatorStack.length!==0 && functionTokens.includes(operatorStack[operatorStack.length-1]) || tokenHasPrecedence(operatorStack[operatorStack.length-1],token) && (operatorStack[operatorStack.length-1]!=="(" || operatorStack[operatorStack.length-1]!=="[")){
+                    outputStack.push(operatorStack[operatorStack.length-1]);
+                    operatorStack.pop()
+                }
+                operatorStack.push(token);
+            }
+        }
+        while(operatorStack.length!==0){
+            outputStack.push(operatorStack.pop());
+        }
+        console.log(outputStack);
+        console.log(operatorStack);
+    }
+}
+
 const precedenceArray = [
     {
         token: "!",
@@ -40,47 +81,8 @@ const precedenceArray = [
         token: "-",
         precedence: 1,
         associativity: "left"
-    }];
-
-export function shuntingYard() {
-    if(!isNaN(inputStack[inputStack.length-1]) || requiredSpecialTokens.includes(inputStack[inputStack.length-1])){
-        let outputStack=[];
-        let operatorStack=[];
-        for(let token of inputStack){
-            if(!isNaN(token)){
-                outputStack.push(token);
-            }
-            else if(token==="e"){
-                outputStack.push(Math.exp(1));
-            }
-            else if(token==="&pi;"){
-                outputStack.push(Math.PI);
-            }
-            else if(functionTokens.includes(token) || token==="(" || token==="["){
-                operatorStack.push(token)
-            }
-            else if((token===")" || token==="]") && operatorStack.length!==0){
-                while(operatorStack.length!==0 && (operatorStack[operatorStack.length-1]!=="(" && operatorStack[operatorStack.length-1]!=="[")){
-                    outputStack.push(operatorStack[operatorStack.length-1]);
-                    operatorStack.pop();
-                }
-                operatorStack.pop();
-            }
-            else{
-                while(operatorStack.length!==0 && functionTokens.includes(operatorStack[operatorStack.length-1]) || tokenHasPrecedence(operatorStack[operatorStack.length-1],token) && (operatorStack[operatorStack.length-1]!=="(" || operatorStack[operatorStack.length-1]!=="[")){
-                    outputStack.push(operatorStack[operatorStack.length-1]);
-                    operatorStack.pop()
-                }
-                operatorStack.push(token);
-            }
-        }
-        while(operatorStack.length!==0){
-            outputStack.push(operatorStack.pop());
-        }
-        console.log(outputStack);
-        console.log(operatorStack);
     }
-}
+];
 
 function tokenHasPrecedence(token1, token2) {
     let hasPrecedence=false;
