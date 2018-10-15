@@ -1,50 +1,50 @@
-import {inputStack, requiredSpecialTokens, functionTokens} from './input-stack';
-
+//IMPORTS
+import {inputStack, functionTokens} from './input-stack';
+//EXPORTS
 export let postfixStack=[];
-
 export function resetPostFixStack() {
     postfixStack=[];
 }
 
 export function shuntingYard() {
-    if(!isNaN(inputStack[inputStack.length-1]) || inputStack[inputStack.length-1]==="]" || requiredSpecialTokens.includes(inputStack[inputStack.length-1])){
-        let operatorStack=[];
-        for(let token of inputStack){
-            if(!isNaN(token)){
-                postfixStack.push(token);
-            }
-            else if(token==="e"){
-                postfixStack.push(Math.exp(1).toString());
-            }
-            else if(token==="&pi;"){
-                postfixStack.push(Math.PI.toString());
-            }
-            else if(functionTokens.includes(token) || token==="(" || token==="["){
-                operatorStack.push(token)
-            }
-            else if((token===")" || token==="]") && operatorStack.length!==0){
-                while(operatorStack.length!==0 && (operatorStack[operatorStack.length-1]!=="(" && operatorStack[operatorStack.length-1]!=="[")){
-                    postfixStack.push(operatorStack[operatorStack.length-1]);
-                    operatorStack.pop();
-                }
+    let operatorStack=[];
+    for(let token of inputStack){
+        if(!isNaN(token)){
+            postfixStack.push(token);
+        }
+        else if(token==="e"){
+            postfixStack.push(Math.exp(1).toString());
+        }
+        else if(token==="&pi;"){
+            postfixStack.push(Math.PI.toString());
+        }
+        else if(functionTokens.includes(token) || token==="(" || token==="["){
+            operatorStack.push(token)
+        }
+        else if((token===")" || token==="]") && operatorStack.length!==0){
+            while(operatorStack.length!==0 && (operatorStack[operatorStack.length-1]!=="(" && operatorStack[operatorStack.length-1]!=="[")){
+                postfixStack.push(operatorStack[operatorStack.length-1]);
                 operatorStack.pop();
             }
-            else{
-                while(operatorStack.length!==0 && functionTokens.includes(operatorStack[operatorStack.length-1]) || tokenHasPrecedence(operatorStack[operatorStack.length-1],token) && (operatorStack[operatorStack.length-1]!=="(" || operatorStack[operatorStack.length-1]!=="[")){
-                    postfixStack.push(operatorStack[operatorStack.length-1]);
-                    operatorStack.pop()
-                }
-                operatorStack.push(token);
+            operatorStack.pop();
+        }
+        else{
+            while(operatorStack.length!==0 && functionTokens.includes(operatorStack[operatorStack.length-1]) || tokenHasPrecedence(operatorStack[operatorStack.length-1],token) && (operatorStack[operatorStack.length-1]!=="(" || operatorStack[operatorStack.length-1]!=="[")){
+                postfixStack.push(operatorStack[operatorStack.length-1]);
+                operatorStack.pop()
             }
+            operatorStack.push(token);
         }
-        while(operatorStack.length!==0){
-            postfixStack.push(operatorStack.pop());
-        }
-        console.log(postfixStack);
-        console.log(operatorStack);
     }
+    while(operatorStack.length!==0){
+        postfixStack.push(operatorStack.pop());
+    }
+    console.log("Postfix Stack:", postfixStack);
+    //console.log(operatorStack);
 }
 
+//array of object literals for each operation, does not include functions which are treated separately,
+//for each operation
 const precedenceArray = [
     {
         token: "!",
@@ -88,6 +88,14 @@ const precedenceArray = [
     }
 ];
 
+/**
+ * @name        tokenHasPrecedence
+ * @desc        checks whether token1 has greater precedence thank token2,
+ *              if tokens have equal precedence but token1 has left associativity than token1 takes precedence
+ * @param       token1 {string} token which is checked for precedence against token2
+ * @param       token2 {string} token which is compared to when checking token1
+ * @returns     {boolean}
+ */
 function tokenHasPrecedence(token1, token2) {
     let hasPrecedence=false;
     let indexOfToken1 = precedenceArray.findIndex(name => name.token === token1);

@@ -1,33 +1,41 @@
+//IMPORTS
 import {output} from "./rpn";
-
+//EXPORTS
 export const mainOutputField        = document.querySelector(".output");
 export const mainInputField         = document.querySelector(".input");
-// input stack containing operations and operands showed in the input field
-export let inputStack;
-// special non numerical tokens which:
+// inputTag - initiating, which HTML tag is an input tag for user input
+export let inputTag                 = mainInputField;
+// inputStack - input stack containing operations and operands showed in the input field
+export let inputStack=[];
+// requiredSpecialTokens - special non numerical tokens which:
 // 1. are required to be at the end of the stack when basicOperations token is entered
 // 2. are required to be at the end of the stack when ")" is entered
 // 4. are required to be at the end of the stack when "^" or "x√" is entered
 // 3. are post multiplied
 // 4. need to at the end of equation when calculate function is invoked
 export const requiredSpecialTokens  = [")","&pi;","e","!"];
-// tokens for functions trigonometric, hyperbolic, logarithms (excluding x-root)
+// functionTokens - tokens for functions trigonometric, hyperbolic, logarithms (excluding x-root)
 export const functionTokens         = ["√","tan","tanh","atan","atanh","cos","acos","cosh","acosh","sin","asin","sinh","asinh","log","ln"];
-
+/**
+ * @name        updateInputStack
+ * @desc        sets the inputStack to empty array and pushes "0" if no calculations have been carried out before,
+ *              if user carried out calculations the function pushes output as a first element
+ */
 export function updateInputStack() {
     inputStack=[];
-    (output===undefined)? inputStack.push("0"):inputStack.push(output.toString())
+    (output===undefined || output===Infinity)? inputStack.push("0"):inputStack.push(output.toString())
+}
+export function resetInputTag() {
+    inputTag = mainInputField;
 }
 
 (function () {
     const buttons                   = document.querySelectorAll(".btn");
     const triHypFunctions           = document.querySelectorAll(".tri-hyp-function");
-    // tokens for basic operations + factorial symbol
+    // basicOperations - tokens for basic operations + factorial symbol
     const basicOperations           = ["+","-","*","/","!","mod"];
-    // tokens not required to be pre multiplied i.e. if entered after a number or )
+    // tokensNotPreMultiplied - tokens not required to be pre multiplied i.e. if entered after a number or )
     const tokensNotPreMultiplied    = ["+","-","*","/",")","^","!","x-root","mod"];
-    // initiating, which HTML tag is an input tag for user input
-    let inputTag                    = mainInputField;
 
     //console.log(inputStack);
 

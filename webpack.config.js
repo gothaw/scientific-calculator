@@ -4,7 +4,7 @@ module.exports = {
     entry: {
         'bundle.js': [
             './src/js/index.js',
-            './src/js/modules/rpn.js'
+            './src/js/modules/calculate.js'
         ]
     },
     output: {
