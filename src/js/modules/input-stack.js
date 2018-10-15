@@ -237,7 +237,7 @@ export function balancingLeftBrackets(textString){
             displayInput(token);
             inputStack.push(token);
         }
-        //console.log(inputStack);
+        console.log(inputStack);
     }
 
     /**
@@ -300,7 +300,7 @@ export function balancingLeftBrackets(textString){
         }
         else
         {
-            if(inputTag.innerHTML.charAt(inputTag.innerHTML.length-1)==="0" && !basicOperations.includes(token) && !inputStack[inputStack.length-1].includes(".") && token!=="." && token!==")"){
+            if(inputStack[inputStack.length-1]==="0" && !basicOperations.includes(token) && token!=="." && token!==")"){
                 inputTag.innerHTML=inputTag.innerHTML.slice(0,-1)+token;
             }
             else {

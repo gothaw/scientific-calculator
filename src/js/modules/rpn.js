@@ -1,6 +1,6 @@
 //IMPORTS
 import {postfixStack} from "./shunting-yard";
-import * as math from "mathjs";
+import {factorial} from "./factorial";
 //EXPORTS
 //output - primitive used to store the final value of calculation
 export let output;
@@ -51,7 +51,7 @@ const operationsArray = [
     {
         token: "!",
         numberOfOperands: 1,
-        calculation: (x) => {return math.factorial(x)}
+        calculation: (x) => {return factorial(x)}
     },
     {
         token: "^",
@@ -169,8 +169,8 @@ const operationsArray = [
  * @name        angleInRadians
  * @desc        Changes angle given in degrees/radians/grads to radians. Used in trigonometric functions.
  *              The option depends on the inner HTML of angleOptionBtn DOM element.
- * @param       angle in radians/degrees/grads
- * @returns     angle in radians
+ * @param       {number} angle in radians/degrees/grads
+ * @returns     {number} angle in radians
  */
 function angleInRadians(angle) {
     if(angleOptionBtn.innerHTML==="deg"){
@@ -186,8 +186,8 @@ function angleInRadians(angle) {
  * @name        calculateAngle
  * @desc        Changes angle in radians calculated by inverse trigonometric functions to degrees/grads or radians.
  *              The option depends on the inner HTML of angleOptionBtn DOM element.
- * @param       angle in radians
- * @returns     angle in radians/degrees/grads
+ * @param       {number} angle in radians
+ * @returns     {number} angle in radians/degrees/grads
  */
 function calculateAngle(angle){
     if(angleOptionBtn.innerHTML==="deg"){
@@ -199,4 +199,4 @@ function calculateAngle(angle){
     return angle
 }
 
-
+console.log(factorial("120"));
