@@ -198,5 +198,3 @@ function calculateAngle(angle){
     }
     return angle
 }
-
-console.log(factorial("120"));
