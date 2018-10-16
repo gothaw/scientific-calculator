@@ -10,7 +10,7 @@
 
     /**
      * @name    advanceOptions
-     * @desc    toggles between degrees, radians and grads
+     * @desc    Toggles between degrees, radians and grads on angle option button.
      */
     function angleOptions() {
         switch (angleOptionBtn.innerHTML) {
@@ -27,7 +27,7 @@
     
     /**
      * @name    triHypFunctions
-     * @desc    toggles between trigonometric and hyperbolic options for advance functions, modifies inner HTML for these functions
+     * @desc    Toggles between trigonometric and hyperbolic options for advance functions, modifies inner HTML for these functions.
      */
     function triHypOptions() {
         if(triHypFunctionBtn.innerHTML==="tri"){
@@ -46,8 +46,7 @@
 
     /**
      * @name    showOptions
-     * @desc    toggles between first and second tab for advance options
-     * @returns secondTab
+     * @desc    Toggles between first and second tab for advance options.
      */
     function showOptions() {
         if(secondTab){
@@ -58,7 +57,6 @@
             advanceOptions.style.left = `-${100}%`;
             secondTab = true;
         }
-        return secondTab;
     }
 
     function eventHandler() {

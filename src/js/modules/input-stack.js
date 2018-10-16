@@ -237,7 +237,7 @@ export function balancingLeftBrackets(textString){
             displayInput(token);
             inputStack.push(token);
         }
-        console.log(inputStack);
+        //console.log(inputStack);
     }
 
     /**

@@ -50,7 +50,7 @@ export function shuntingYard() {
     while(operatorStack.length!==0){
         postfixStack.push(operatorStack.pop());
     }
-    console.log("Postfix Stack:", postfixStack);
+    //console.log("Postfix Stack:", postfixStack);
     //console.log(operatorStack);
 }
 /**

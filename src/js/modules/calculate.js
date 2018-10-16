@@ -35,7 +35,7 @@ export let originalStack = [];
      * @desc        Modifies infix stack by replacing '-1*' with '-1' and '*'. It also adds missing ']' to the end of the stack.
      */
     function modifyInfixStack() {
-        console.log("Infix Stack:",infixStack);
+        //console.log("Infix Stack:",infixStack);
         let unbalancedSquareBrackets=0;
         for(let token of infixStack){
             if(token==="-1*"){
@@ -52,7 +52,7 @@ export let originalStack = [];
         for(let i=0;i<unbalancedSquareBrackets;i++){
             infixStack.push("]")
         }
-        console.log("Modified Infix Stack",infixStack);
+        //console.log("Modified Infix Stack",infixStack);
     }
     /**
      * @name        duplicateInfixStack
@@ -60,7 +60,7 @@ export let originalStack = [];
      */
     function duplicateInfixStack() {
         originalStack = infixStack.slice();
-        console.log("Original Stack:",originalStack);
+        //console.log("Original Stack:",originalStack);
     }
 
     function eventHandler() {

@@ -39,7 +39,7 @@ export function reversePolishNotation() {
         }
     }
     output=+outputStack[0].toFixed(14);
-    console.log("Output Stack:",outputStack);
+    //console.log("Output Stack:",outputStack);
 }
 /**
  END OF EXPORTS AND IMPORTS
