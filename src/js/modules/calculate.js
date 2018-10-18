@@ -64,7 +64,7 @@ export let originalStack = [];
     }
 
     function eventHandler() {
-        calculateButton.addEventListener("click", () => {
+        calculateButton.addEventListener("click", function (){
             if((!isNaN(infixStack[infixStack.length-1]) || requiredSpecialTokens.includes(infixStack[infixStack.length-1])) && balancingLeftBrackets(infixStack)===0) {
                 try{
                     duplicateInfixStack();
