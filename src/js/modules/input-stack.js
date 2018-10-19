@@ -288,6 +288,9 @@ export function balancingLeftBrackets(textString){
                         numberOfLeftBrackets++;
                         indexLastLeftBracket-=i;
                     }
+                    else if(inputTag.innerHTML.charAt(indexLastLeftBracket-i)===")"){
+                        numberOfRightBrackets++;
+                    }
                 }
                 degree = inputTag.innerHTML.slice(indexLastLeftBracket,inputTag.innerHTML.length);
                 inputTag.innerHTML=inputTag.innerHTML.slice(0,indexLastLeftBracket);
