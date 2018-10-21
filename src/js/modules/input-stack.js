@@ -53,7 +53,7 @@ export function balancingLeftBrackets(textString){
         if(token==="("){
             count++;
         }
-        if(token===")"){
+        else if(token===")"){
             count--;
         }
     }
@@ -368,7 +368,6 @@ export function balancingLeftBrackets(textString){
                     inputStack.pop();
                 }
                 while (inputStack[inputStack.length-1]==="]"){
-                    inputTag.innerHTML=inputTag.innerHTML.slice(0,-1);
                     inputStack.pop();
                     inputTag=inputTag.lastChild;
                 }
@@ -479,7 +478,7 @@ export function balancingLeftBrackets(textString){
      * @param   number {string}
      */
     function addNumber(number) {
-        if(!isNaN(inputStack[inputStack.length-1]) && inputStack[0]!=="0"){
+        if(!isNaN(inputStack[inputStack.length-1]) && (inputStack[0]!=="0" || inputStack.length!==1)){
             addOperation(basicOperations[2]);
         }
         addToInputStack(number);
@@ -493,7 +492,7 @@ export function balancingLeftBrackets(textString){
      *          If last token is operation + or -, the function alternates between the two.
      */
     function plusMinus() {
-        if(!isNaN(inputStack[inputStack.length-1]) || inputStack[inputStack.length-1]==="&pi;"){
+        if(!isNaN(inputStack[inputStack.length-1]) || inputStack[inputStack.length-1]==="&pi;" || inputStack[inputStack.length-1]==="e"){
             let index;
             if(inputStack[inputStack.length-2]==="+"){
                 index=inputTag.innerHTML.lastIndexOf("+");
@@ -537,7 +536,7 @@ export function balancingLeftBrackets(textString){
      * @desc    Removes '0' from inputStack and input field when first token is introduced.
      */
     function initialClear(){
-        if(inputStack[0]==="0" && mainInputField.length===1)
+        if(inputStack[0]==="0" && inputStack.length===1)
         {
             inputStack.pop();
             mainInputField.innerHTML=""
