@@ -1,56 +1,56 @@
 //IMPORTS
 import {inputStack, functionTokens} from './input-stack';
 //EXPORTS
-//postfixStack - stack used to store postfix equation i.e. result of shunting yard algorithm
-export let postfixStack=[];
+//postFixStack - stack used to store postfix equation i.e. result of shunting yard algorithm
+export let postFixStack=[];
 /**
  * @name        resetPostFixStack
- * @desc        Resets the postfixStack to an empty array.
+ * @desc        Resets the postFixStack to an empty array.
  */
 export function resetPostFixStack() {
-    postfixStack=[];
+    postFixStack=[];
 }
 /**
  * @name        shuntingYard
  * @desc        Function that carries out shunting yard algorithm on inputStack.
  *              It produces a post fix notation for given infix notation.
- *              It stores output in postfixStack. Operators and functions are stored in operatorStack.
+ *              It stores output in postFixStack. Operators and functions are stored in operatorStack.
  *              Algorithm description: https://en.wikipedia.org/wiki/Shunting-yard_algorithm#The_algorithm_in_detail
  */
 export function shuntingYard() {
     let operatorStack=[];
     for(let token of inputStack){
         if(!isNaN(token)){
-            postfixStack.push(token);
+            postFixStack.push(token);
         }
         else if(token==="e"){
-            postfixStack.push(Math.exp(1).toString());
+            postFixStack.push(Math.exp(1).toString());
         }
         else if(token==="&pi;"){
-            postfixStack.push(Math.PI.toString());
+            postFixStack.push(Math.PI.toString());
         }
         else if(functionTokens.includes(token) || token==="(" || token==="["){
             operatorStack.push(token)
         }
         else if((token===")" || token==="]") && operatorStack.length!==0){
             while(operatorStack.length!==0 && (operatorStack[operatorStack.length-1]!=="(" && operatorStack[operatorStack.length-1]!=="[")){
-                postfixStack.push(operatorStack[operatorStack.length-1]);
+                postFixStack.push(operatorStack[operatorStack.length-1]);
                 operatorStack.pop();
             }
             operatorStack.pop();
         }
         else{
             while(operatorStack.length!==0 && functionTokens.includes(operatorStack[operatorStack.length-1]) || token1HasPrecedence(operatorStack[operatorStack.length-1],token) && (operatorStack[operatorStack.length-1]!=="(" || operatorStack[operatorStack.length-1]!=="[")){
-                postfixStack.push(operatorStack[operatorStack.length-1]);
+                postFixStack.push(operatorStack[operatorStack.length-1]);
                 operatorStack.pop()
             }
             operatorStack.push(token);
         }
     }
     while(operatorStack.length!==0){
-        postfixStack.push(operatorStack.pop());
+        postFixStack.push(operatorStack.pop());
     }
-    //console.log("Postfix Stack:", postfixStack);
+    //console.log("Postfix Stack:", postFixStack);
     //console.log(operatorStack);
 }
 /**

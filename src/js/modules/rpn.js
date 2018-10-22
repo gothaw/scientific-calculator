@@ -1,5 +1,5 @@
 //IMPORTS
-import {postfixStack} from "./shunting-yard";
+import {postFixStack} from "./shunting-yard";
 import {factorial} from "./factorial";
 //EXPORTS
 //output - primitive used to store the final value of calculation
@@ -20,7 +20,7 @@ export function resetOutputStack() {
  *              Algorithm description: https://en.wikipedia.org/wiki/Reverse_Polish_notation#Postfix_evaluation_algorithm
  */
 export function reversePolishNotation() {
-    for (let token of postfixStack){
+    for (let token of postFixStack){
         if(!isNaN(token)){
             outputStack.push(JSON.parse(token));
         }
