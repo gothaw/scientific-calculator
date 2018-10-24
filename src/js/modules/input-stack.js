@@ -282,13 +282,14 @@ export function balancingLeftBrackets(textString){
             }
             else{
                 let numberOfLeftBrackets=0;
-                let indexLastLeftBracket=inputTag.innerHTML.length-1;
-                for(let i=0;indexLastLeftBracket>=0 && numberOfLeftBrackets<numberOfRightBrackets;i++){
-                    if(inputTag.innerHTML.charAt(indexLastLeftBracket-i)==="("){
+                let numberOfRightBrackets=1; //at least one ")" to the left of x-root
+                let indexLastLeftBracket=0;
+                for(let i=2;i<inputTag.innerHTML.length-1 && numberOfLeftBrackets<numberOfRightBrackets;i++){
+                    if(inputTag.innerHTML.charAt(inputTag.innerHTML.length-i)==="("){
                         numberOfLeftBrackets++;
-                        indexLastLeftBracket-=i;
+                        indexLastLeftBracket=inputTag.innerHTML.length-i;
                     }
-                    else if(inputTag.innerHTML.charAt(indexLastLeftBracket-i)===")"){
+                    else if(inputTag.innerHTML.charAt(inputTag.innerHTML.length-i)===")"){
                         numberOfRightBrackets++;
                     }
                 }
@@ -299,6 +300,7 @@ export function balancingLeftBrackets(textString){
                 inputTag.innerHTML+=degree;
                 inputTag=inputTag.parentNode;
             }
+            //(9+69*(9+9)*6)
             inputTag.innerHTML+="&radic;";
         }
         else
