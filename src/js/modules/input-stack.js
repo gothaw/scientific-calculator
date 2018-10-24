@@ -283,7 +283,7 @@ export function balancingLeftBrackets(textString){
             else{
                 let numberOfLeftBrackets=0;
                 let indexLastLeftBracket=inputTag.innerHTML.length-1;
-                for(let i=1;indexLastLeftBracket>=0 && numberOfLeftBrackets<numberOfRightBrackets;i++){
+                for(let i=0;indexLastLeftBracket>=0 && numberOfLeftBrackets<numberOfRightBrackets;i++){
                     if(inputTag.innerHTML.charAt(indexLastLeftBracket-i)==="("){
                         numberOfLeftBrackets++;
                         indexLastLeftBracket-=i;

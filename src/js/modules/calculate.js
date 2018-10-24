@@ -1,6 +1,6 @@
 //IMPORTS
 import {inputStack as infixStack, inputTag, mainOutputField, requiredSpecialTokens, resetInputTag, updateInputStack, balancingLeftBrackets} from "./input-stack";
-import {resetPostFixStack, shuntingYard} from "./shunting-yard";
+import {resetPostfixStack, shuntingYard} from "./shunting-yard";
 import {output, resetOutputStack, reversePolishNotation} from "./rpn";
 //EXPORTS
 export let originalStack = [];
@@ -16,7 +16,7 @@ export let originalStack = [];
      */
     function resetCalculator(error=false) {
         updateInputStack(error);
-        resetPostFixStack();
+        resetPostfixStack();
         resetOutputStack();
     }
     /**

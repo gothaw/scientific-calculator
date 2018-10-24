@@ -38,7 +38,7 @@ header{
     font-family: "Agency FB", sans-serif;
     margin: 12vh 0 20px;
     color: $color-light-2;
-    @media screen and (min-width: 1080px){
+    @media screen and (min-width: 1025px){
       font-size: 3em;
     }
   }
@@ -47,7 +47,7 @@ header{
     font-family: "Source Sans Pro", sans-serif;
     margin-bottom: 15vh;
     line-height: 1.25em;
-    @media screen and (min-width: 1080px){
+    @media screen and (min-width: 1025px){
       font-size: 1.25em;
     }
   }
@@ -126,21 +126,37 @@ header{
       font-family: "Agency FB", sans-serif;
       padding: 5px 0;
       cursor: pointer;
-      font-size: 1.5em;
+      font-size: 1.25em;
       transition: all 0.2s;
       -webkit-user-select: none;
       -moz-user-select: none;
       -ms-user-select: none;
       user-select: none;
+      min-height: 34px;
       &:hover{
         color: #fff;
       }
       &:active{
         background-color: $color-light-2;
       }
+      @media screen and (min-width: 768px){
+        font-size: 1.5em;
+      }
     }
     .highlighted-btn{
       background-color: $color-light-1;
+    }
+  }
+  .buttons-advance{
+    grid-template-columns: repeat(2, 1fr);
+    width: 100%;
+    div{
+      font-size: 1.1em;
+      min-height: 34px;
+      @media screen and (min-width: 768px){
+        font-size: 1.25em;
+        min-height: 34px;
+      }
     }
   }
   .buttons-top-row{
@@ -154,7 +170,7 @@ header{
       .equals{
         grid-row: span 2;
         align-self: center;
-        padding: 24px 0;
+        padding: 26px 0;
         background-color: $color-light-2;
         &:hover{
           color: #fff;
@@ -162,14 +178,9 @@ header{
         &:active{
           background-color: $color-light-1;
         }
-      }
-    }
-    .buttons-advance{
-      grid-template-columns: repeat(2, 1fr);
-      width: 100%;
-      div{
-        font-size: 1.25em;
-        min-height: 34px;
+        @media screen and (min-width: 768px){
+          padding: 24px 0;
+        }
       }
     }
     .advance-options-wrapper{
