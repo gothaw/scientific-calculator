@@ -27,6 +27,7 @@
   "homepage": "https://github.com/gothaw/scientific-calculator#readme",
   "devDependencies": {
     "browser-sync": "~2.24.7",
+    "express": "~4.16.4",
     "handlebars": "~4.0.12",
     "node-sass": "~4.9.4",
     "webpack": "~4.23.0",
