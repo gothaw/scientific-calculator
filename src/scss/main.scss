@@ -139,7 +139,7 @@ header{
       &:active{
         background-color: $color-light-2;
       }
-      @media screen and (min-width: 768px){
+      @media screen and (min-width: 1025px){
         font-size: 1.5em;
       }
     }
@@ -153,7 +153,7 @@ header{
     div{
       font-size: 1.1em;
       min-height: 34px;
-      @media screen and (min-width: 768px){
+      @media screen and (min-width: 1025px){
         font-size: 1.25em;
         min-height: 34px;
       }
@@ -178,7 +178,7 @@ header{
         &:active{
           background-color: $color-light-1;
         }
-        @media screen and (min-width: 768px){
+        @media screen and (min-width: 1025px){
           padding: 24px 0;
         }
       }
