@@ -282,9 +282,9 @@ export function balancingLeftBrackets(textString){
             }
             else{
                 let numberOfLeftBrackets=0;
-                let numberOfRightBrackets=1; //at least one ")" to the left of x-root
+                let numberOfRightBrackets=0;
                 let indexLastLeftBracket=0;
-                for(let i=2;i<inputTag.innerHTML.length-1 && numberOfLeftBrackets<numberOfRightBrackets;i++){
+                for(let i=1;i<inputTag.innerHTML.length-1 && (numberOfLeftBrackets<numberOfRightBrackets || numberOfRightBrackets===0); i++){
                     if(inputTag.innerHTML.charAt(inputTag.innerHTML.length-i)==="("){
                         numberOfLeftBrackets++;
                         indexLastLeftBracket=inputTag.innerHTML.length-i;
@@ -300,7 +300,6 @@ export function balancingLeftBrackets(textString){
                 inputTag.innerHTML+=degree;
                 inputTag=inputTag.parentNode;
             }
-            //(9+69*(9+9)*6)
             inputTag.innerHTML+="&radic;";
         }
         else
