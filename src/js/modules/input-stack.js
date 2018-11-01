@@ -284,7 +284,7 @@ export function balancingLeftBrackets(textString){
                 let numberOfLeftBrackets=0;
                 let numberOfRightBrackets=0;
                 let indexLastLeftBracket=0;
-                for(let i=1;i<inputTag.innerHTML.length-1 && (numberOfLeftBrackets<numberOfRightBrackets || numberOfRightBrackets===0); i++){
+                for(let i=1;i<=inputTag.innerHTML.length && (numberOfLeftBrackets<numberOfRightBrackets || numberOfRightBrackets===0); i++){
                     if(inputTag.innerHTML.charAt(inputTag.innerHTML.length-i)==="("){
                         numberOfLeftBrackets++;
                         indexLastLeftBracket=inputTag.innerHTML.length-i;
@@ -293,6 +293,7 @@ export function balancingLeftBrackets(textString){
                         numberOfRightBrackets++;
                     }
                 }
+                console.log(indexLastLeftBracket);
                 degree = inputTag.innerHTML.slice(indexLastLeftBracket,inputTag.innerHTML.length);
                 inputTag.innerHTML=inputTag.innerHTML.slice(0,indexLastLeftBracket);
                 inputTag.appendChild(superscript);
