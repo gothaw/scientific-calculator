@@ -12,7 +12,7 @@ https://en.wikipedia.org/wiki/Reverse_Polish_notation#Postfix_evaluation_algorit
 
 ### Built With
 
-HTML5, CSS3, JavaScript and jQuery
+HTML5, CSS3, JavaScript
 
 ### Authors
 
